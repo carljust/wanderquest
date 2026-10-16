@@ -8,6 +8,8 @@ Alle sechs Markdown-Unterlagen in [wyldo_codex_designpaket_v1](wyldo_codex_desig
 
 **Aktuelle Entdecken-Referenz:** Der neue helle Chat-Mockup hat für die Übersicht Vorrang vor dem dunklen v1-Aufbau. Wyldo-Name und Original-Fuchs bleiben erhalten. [Aufbau, Datenregeln und neue Screenshots](reviews/discovery-layout.md). Questdetails und Navigation behalten ihre zuvor geprüfte Adventure-Gestaltung.
 
+Das zwischenzeitlich hochgeladene [technische Pflichtenheft](PFLICHTENHEFT.md) wurde unverändert übernommen und gelesen. Der hier als „Phasen 1–3“ bezeichnete ältere Analyse-/Design-/Sichtprüfungsauftrag entspricht dem Design-Schritt P2 des Pflichtenhefts. Dessen Freigabestopp vor dem weiteren Backend-/Quest-Ausbau bleibt bestehen.
+
 Der Paket-Seed enthält fünf Alva-/Sternenkompass-Stationen und ungeprüfte Ortsangaben. Er wird nicht importiert. Die vorhandene Geschichte mit acht Stationen, Schatzkarte, Runa, vier Siegeln und Kristall bleibt erhalten. Auch Authentifizierung, Supabase-Migrationen, Rätsellogik, Offline-Outbox und serverseitige Abzeichenregeln werden in diesem Schritt nicht ersetzt.
 
 ## Implementiert
