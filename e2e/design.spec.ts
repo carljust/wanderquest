@@ -1,12 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
 const directory =
   process.env.WYLDO_SCREENSHOT_DIR ?? "test-results/screenshots";
-async function shot(page: Page, name: string) {
-  await page.evaluate(() =>
-    document.querySelectorAll("*").forEach((element) => {
-      if (element.scrollTop) element.scrollTop = 0;
-    }),
-  );
+async function shot(page: Page, name: string, top = true) {
+  if (top)
+    await page.evaluate(() =>
+      document.querySelectorAll("*").forEach((element) => {
+        if (element.scrollTop) element.scrollTop = 0;
+      }),
+    );
   // Wait for RN onLayout and responsive state after scrolling or resizing.
   await page.evaluate(
     () =>
@@ -84,12 +85,15 @@ test("discovery search, filters and bookmarks remain usable on a small screen", 
   await page
     .getByRole("button", { name: "Nur gemerkte Quests", exact: true })
     .click();
+  await page.getByRole("button", { name: "Filter anwenden" }).click();
   await expect(
     page.getByRole("button", { name: "Abenteuer entdecken", exact: true }),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Questfilter öffnen" }).click();
   await page
     .getByRole("button", { name: "Nur offline gespeicherte Quests" })
     .click();
+  await page.getByRole("button", { name: "Filter anwenden" }).click();
   await expect(
     page.getByText("Keine passende Quest gefunden.", { exact: true }),
   ).toBeVisible();
@@ -105,6 +109,74 @@ test("discovery search, filters and bookmarks remain usable on a small screen", 
     ),
   ).toBe(true);
   await shot(page, "01-discover-small");
+  const tagline = await page
+    .getByText("Draußen wird zum Abenteuer.", { exact: true })
+    .boundingBox();
+  const greeting = await page
+    .getByText("Hallo Abenteurer!", { exact: true })
+    .boundingBox();
+  expect(tagline).not.toBeNull();
+  expect(greeting).not.toBeNull();
+  expect(tagline!.y + tagline!.height).toBeLessThanOrEqual(greeting!.y);
+});
+
+test("overview facets, chapter shortcut and offline download work with honest metadata", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await practice(page);
+  await page
+    .getByRole("button", { name: "Alter filtern", exact: true })
+    .scrollIntoViewIfNeeded();
+  await shot(page, "01-discover-actions", false);
+  for (const [facet, choice] of [
+    ["Alter filtern", "8 Jahre"],
+    ["Dauer filtern", "Bis 90 Minuten"],
+    ["Distanz filtern", "Bis 4 Kilometer"],
+  ]) {
+    await page.getByRole("button", { name: facet, exact: true }).click();
+    await page.getByRole("button", { name: choice, exact: true }).click();
+    if (facet === "Dauer filtern")
+      await shot(page, "01-discover-filters", false);
+    await page.getByRole("button", { name: "Filter anwenden" }).click();
+    await expect(
+      page.getByText("Keine passende Quest gefunden.", { exact: true }),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Suche und Filter zurücksetzen" })
+      .click();
+  }
+  await page.getByRole("button", { name: "Schwierigkeit filtern" }).click();
+  await page
+    .getByRole("button", { name: "Rätsel: leicht bis mittel", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Filter anwenden" }).click();
+  await expect(
+    page.getByRole("button", { name: "Abenteuer entdecken", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Quest-Inhalte herunterladen", exact: true })
+    .click();
+  await expect(
+    page.getByText("Geschichte und Bilder gespeichert", { exact: true }),
+  ).toBeVisible();
+  await page.reload();
+  await expect(
+    page.getByText("Geschichte und Bilder gespeichert", { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("button", { name: "Kapitel und Steinsiegel ansehen" })
+    .click();
+  await expect(
+    page.getByText("Dein Fortschritt", { exact: true }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Zurück", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Alle Quests auf der Karte anzeigen" })
+    .click();
+  await expect(page.locator(".leaflet-tile-loaded").first()).toBeVisible({
+    timeout: 15000,
+  });
 });
 test("direction and map switch, virtual distance and pause preserve the existing quest", async ({
   page,

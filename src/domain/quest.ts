@@ -53,6 +53,12 @@ export type Quest = {
   difficulty: string;
   // Read-only aggregate supplied by the quest data source; no player reviews here.
   ratingSummary?: { average: number | null; count: number };
+  // Optional factual listing metadata. Time/distance are filtered only after field release.
+  listing?: {
+    minimumAge?: number;
+    durationMinutes?: number;
+    distanceKm?: number;
+  };
   preparation: string[];
   start: string;
   approval: "pending_source_review" | "approved";

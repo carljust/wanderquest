@@ -17,6 +17,10 @@ Vorhanden sind Expo SDK 57, deutsche Oberfläche, E-Mail/Passwort und Google-PKC
 - Mockup-XP/Level und weitere Questkarten sind Beispieldaten. Übungs-XP werden nur als Vorschau aus lokalem Testfortschritt angezeigt; es wird keine neue reguläre XP-Vergabe behauptet.
 - Rucksack und die automatische Ankunft/Begrüßung aus dem Storyboard gehören zum nachgelagerten Ausbau. Die vier Tabs sind korrekt benannt und geordnet. Der Rucksack zeigt vorerst die vorhandene nutzbare Abenteuer-/Siegelübersicht; eine neue vollständige Rucksackmaske bleibt zurückgestellt.
 
+## Neueste Designkorrektur
+
+Für Entdecken gilt inzwischen der helle Chat-Mockup mit Naturkopf, überlappender Suche, cremefarbenen Bildkarten, Filterchips und heller Hauptnavigation. [Aktueller Aufbau](reviews/discovery-layout.md). Die ursprüngliche Analyse unten beschreibt die Abweichungen vom ersten v1-Screen; sie setzt die neuere Nutzerreferenz nicht außer Kraft.
+
 ## Konkrete Arbeitsschritte
 
 1. **Abgeschlossen – Phase 1:** Unterlagen suchen, vorhandene Architektur lesen, Abweichungen dokumentieren und Branch `feat/wyldo-adventure-design-review` anlegen.
