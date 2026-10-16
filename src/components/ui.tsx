@@ -2,6 +2,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { type ComponentProps, type PropsWithChildren } from "react";
 import {
   ActivityIndicator,
+  type ColorValue,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -19,7 +20,7 @@ export function Icon({
   size = 22,
 }: {
   name: IconName;
-  color?: string;
+  color?: ColorValue;
   size?: number;
 }) {
   return <Ionicons name={name} color={color} size={size} aria-hidden />;
@@ -36,7 +37,13 @@ export function Screen({
         withHeader ? ["left", "right", "bottom"] : ["top", "left", "right"]
       }
     >
-      <ScrollView contentContainerStyle={layout.content}>{children}</ScrollView>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        contentContainerStyle={layout.content}
+      >
+        {children}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -44,13 +51,11 @@ export function Screen({
 export function Brand() {
   return (
     <View style={[layout.row, { justifyContent: "space-between" }]}>
-      <View style={layout.row} accessibilityLabel="WanderQuest">
+      <View style={layout.row} accessibilityLabel="Wyldo">
         <View style={styles.logo}>
           <Icon name="trail-sign-outline" color={colors.background} size={27} />
         </View>
-        <Text style={styles.brand}>
-          Wander<Text style={{ color: colors.orange }}>Quest</Text>
-        </Text>
+        <Text style={styles.brand}>Wyldo</Text>
       </View>
       <View style={styles.compass}>
         <Icon name="compass-outline" size={25} />
@@ -157,7 +162,13 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   secondary: { backgroundColor: colors.moss },
-  buttonText: { color: colors.surface, fontSize: 15, fontWeight: "700" },
+  buttonText: {
+    color: colors.surface,
+    fontSize: 15,
+    fontWeight: "700",
+    flexShrink: 1,
+    textAlign: "center",
+  },
   notice: {
     padding: 16,
     borderRadius: 16,

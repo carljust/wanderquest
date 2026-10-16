@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "WanderQuest",
-    "slug": "wanderquest",
-    "version": "0.1.0",
+    "name": "Wyldo",
+    "slug": "wyldo",
+    "version": "0.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "scheme": "wanderquest",
+    "scheme": "wyldo",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true
@@ -14,7 +14,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#183D32"
-      }
+      },
+      "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
       "output": "single",
@@ -33,10 +34,18 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "WanderQuest verwendet deinen Standort nur für von dir gestartete Kartenfunktionen.",
-          "locationAlwaysAndWhenInUsePermission": "WanderQuest verwendet deinen Standort nur während der Nutzung.",
+          "locationWhenInUsePermission": "Wyldo verwendet deinen Standort während einer Quest, um Stationen auf freigegebenen Wegen freizuschalten.",
+          "locationAlwaysAndWhenInUsePermission": "Wyldo verwendet deinen Standort nur während der Nutzung.",
           "isIosBackgroundLocationEnabled": false,
           "isAndroidBackgroundLocationEnabled": false
+        }
+      ],
+      "expo-secure-store",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false
         }
       ]
     ],

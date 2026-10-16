@@ -1,0 +1,9 @@
+.leaflet-container {
+  font-family: system-ui, sans-serif;
+  z-index: 0;
+}
+.leaflet-container .leaflet-control-attribution {
+  font-size: 9px;
+  max-width: 100%;
+  white-space: normal;
+}

@@ -1,10 +1,13 @@
-import { Tabs } from "expo-router";
+import { Redirect, Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Icon } from "@/components/ui";
+import { Icon, LoadingState } from "@/components/ui";
+import { useAuth } from "@/features/auth/provider";
 import { colors } from "@/theme";
-
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const auth = useAuth();
+  if (auth.loading) return <LoadingState />;
+  if (!auth.session && !auth.practice) return <Redirect href="/auth/login" />;
   return (
     <Tabs
       screenOptions={{
@@ -25,35 +28,33 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Entdecken",
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name="compass-outline"
-              color={focused ? colors.forest : colors.muted}
-            />
+          tabBarIcon: ({ color }) => (
+            <Icon name="compass-outline" color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="missions"
         options={{
-          title: "Missionen",
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name="trail-sign-outline"
-              color={focused ? colors.forest : colors.muted}
-            />
+          title: "Abenteuer",
+          tabBarIcon: ({ color }) => (
+            <Icon name="trail-sign-outline" color={color} />
           ),
         }}
-      />
+      ></Tabs.Screen>
       <Tabs.Screen
         name="map"
         options={{
           title: "Karte",
-          tabBarIcon: ({ focused }) => (
-            <Icon
-              name="map-outline"
-              color={focused ? colors.forest : colors.muted}
-            />
+          tabBarIcon: ({ color }) => <Icon name="map-outline" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profil",
+          tabBarIcon: ({ color }) => (
+            <Icon name="person-outline" color={color} />
           ),
         }}
       />

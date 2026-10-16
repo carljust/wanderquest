@@ -1,143 +1,103 @@
-# WanderQuest 🌲
+# Wyldo
 
-Eine mobile Outdoor-Abenteuer-App für iOS und Android mit **React Native, Expo SDK 57, TypeScript und Expo Router**. Diese erste Version ist eine bewusst kleine, lauffähige Grundlage für die spätere Spielmechanik.
+Outdoor-Abenteuer für iOS und Android, auf der bestehenden Expo-57-/React-Native-/TypeScript-Grundlage. Die erste Quest heißt **„Der verlorene Schatz der Externsteine“**. Wyldo ist auch der Name des Fuchses. Es gibt keinen Creator-Modus.
 
-## Was bereits funktioniert
+**Stand: spielbarer Entwicklungsmodus; noch keine vollständige Produktabnahme.** Alle acht Stationen funktionieren im Übungslauf. Original-Mockup, ursprüngliche Quest-Datei, freigegebene Fuchs-/Questgrafiken, Supabase-Publishable-Key und geprüfte Stationsorte fehlen in dieser Umgebung. Der Seed bleibt deshalb unveröffentlicht. Es werden weder Koordinaten noch eine freigegebene Wanderroute vorgetäuscht.
 
-- Startseite mit WanderQuest-Branding und eigens erstellten Landschaftsillustrationen.
-- Drei vollständig synthetische Beispielmissionen: Wald, See und Höhenrunde.
-- Missionsübersicht mit Suche, Schwierigkeitsfiltern und Merkliste.
-- Missionsdetails mit Strecke, Dauer, Aufstieg, Geschichte und Beispielpunkten.
-- Geräteübergreifende Navigation zwischen Start, Missionen, Details und Kartenvorschau.
-- Lokal gespeicherte Merkliste mit AsyncStorage, einschließlich Fehlerbehandlung.
-- Schematische, missionsabhängige Kartenvorschau mit vorbereitetem `react-native-maps`-Adapter für native Geräte.
-- Vorbereiteter `expo-location`-Adapter; die App fragt aktuell keinen Standort ab.
-- Repository-Schnittstelle, über die später ein Supabase-Backend angebunden werden kann.
+## Schnell starten
 
-**Es gibt noch keine Anmeldung, Supabase-Verbindung, spielbaren Aufgaben, GPS-Verfolgung oder echte Routennavigation.** Alle Namen, Geschichten, Entfernungen und Koordinaten sind erfunden. Die Vorschau ist keine Wanderkarte. Es sind keine Zugangsdaten, API-Schlüssel oder kostenpflichtigen Dienste nötig.
-
-## Voraussetzungen
-
-- Node.js **24.19.0** empfohlen (`.nvmrc`); unterstützt wird Node 24 ab 24.3.0.
-- npm 11 (Lockfile mit 11.9.0 erstellt; saubere Installation auch mit 11.17.0 geprüft).
-- Für den Android-Smartphone-Test: **Expo Go mit Unterstützung für SDK 57**. Projekt und Expo Go müssen dieselbe SDK-Hauptversion verwenden; die Versionsnummer der Expo-Go-App ist eine andere Angabe.
-- Für iOS ist ebenfalls ein kompatibler Expo-Go-Client oder ein eigener Development Build erforderlich. Ein Test auf einem echten iOS-Gerät steht noch aus.
-
-## Installation und Start auf dem Smartphone
+Node **24.3–24.x**, empfohlen die Version aus `.nvmrc`, und npm 11. Expo Go auf dem Smartphone muss SDK **57** unterstützen.
 
 ```bash
-git clone https://github.com/carljust/wanderquest.git
-cd wanderquest
-# Optional, falls nvm installiert ist:
-nvm install
-nvm use
-npm ci
+npm ci --include=dev
+cp .env.example .env.local
 npm start
 ```
 
-Smartphone und Entwicklungsrechner müssen im selben lokalen Netzwerk sein. Den QR-Code auf Android in Expo Go scannen. Metro muss auf dem Entwicklungsrechner weiterlaufen. Für den Android-Test mit einem kompatiblen Expo-Go-Client ist weder ein Expo-Konto noch ein eigener nativer Build nötig.
-
-Falls die Verbindung nicht klappt: VPN/Gastnetz-Isolation und die Firewall für den Metro-Port prüfen. Mit `npm start -- --clear` lässt sich der lokale Bundler-Cache neu aufbauen. Für den Start über das Internet ist der unten beschriebene Smartphone-Befehl vorbereitet.
+QR-Code mit Expo Go scannen. Lokal müssen Rechner und Smartphone normalerweise im selben Netzwerk sein. In GitHub Codespaces ist keine lokale Node-Installation auf dem Mac nötig:
 
 ```bash
-npm run web       # Browser-Vorschau
-npm run android   # Android-Emulator, falls lokal eingerichtet
-npm run ios       # iOS-Simulator, nur auf macOS mit Xcode
-```
-
-In der Cloud laufen weder ein Smartphone noch Xcode/Android-Emulatoren. Ein dort gestarteter Metro-Prozess ist nicht automatisch über das lokale Netzwerk deines Smartphones erreichbar. Über den folgenden Tunnel-Befehl lässt sich ein erreichbarer Codespace mit dem Smartphone verbinden. Ein erfolgreicher JavaScript-Export ersetzt keinen Gerätetest.
-
-## Android-Test aus GitHub Codespaces
-
-Im Codespaces-Terminal im Projektverzeichnis ausführen:
-
-```bash
-nvm install
-nvm use
+cd /workspaces/wanderquest
 npm ci --include=dev
 npm run start:phone
 ```
 
-`start:phone` startet die lokale Expo-CLI für SDK 57 mit Expo Go, einem ngrok-Tunnel und geleertem Metro-Cache. Die Tunnel-Hilfe `@expo/ngrok` wird mit den Entwicklungsabhängigkeiten installiert. Das Terminal und der Codespace müssen während des Tests weiterlaufen. Den neuen QR-Code in Expo Go auf dem Android-Gerät öffnen.
+Das verwendet den SDK-57-ngrok-Tunnel. Dafür muss das Codespace ausgehende ngrok-Verbindungen erlauben. `EXPO_OFFLINE` darf beim Tunnelstart nicht gesetzt sein. Den alten Expo-Prozess vorher mit `Ctrl+C` beenden. Kein zusätzliches `ngrok` an den Startbefehl anhängen.
 
-Bei einem bereits geklonten Codespace zuerst den laufenden Server mit `Control + C` beenden und die Korrektur übernehmen:
+Auf der Anmeldeseite **„Ohne Konto im Entwicklungsmodus testen“** wählen, Quest öffnen und **„Übungsabenteuer starten“** drücken. „Ankunft simulieren“ ersetzt ausschließlich in diesem Modus die Anreise. Rätsel, Hinweise, vier Siegel und das Finale lassen sich vollständig testen. Fortschritt und Einstellungen bleiben nach Neustart erhalten. Unter Profil lässt sich der Übungslauf zurücksetzen. Übung und echtes Konto haben getrennte Datenspeicher; Übungsläufe vergeben keine regulären Abzeichen. Release-Bundles deaktivieren den Entwicklungsmodus zusätzlich über `__DEV__`.
 
-```bash
-git pull --ff-only
-npm ci --include=dev
-npm run start:phone
+Browser: `npm run web`. Der Browser besitzt keine native Bildschirmtastatur und ersetzt keinen Gerätetest.
+
+## Supabase einrichten
+
+Die mitgeteilte Projektadresse steht in `.env.example`. In `.env.local` bzw. den Umgebungsvariablen ergänzen:
+
+```dotenv
+EXPO_PUBLIC_SUPABASE_URL=https://rxkvdixavsrakbtmnsao.supabase.co
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+EXPO_PUBLIC_ENABLE_DEV_MODE=true
 ```
 
-Der Tunnel verwendet bei SDK 57 bereits ngrok über `--tunnel`; der Startbefehl ist vollständig in `package.json` hinterlegt. Falls `git pull` lokale Änderungen meldet, diese vor dem Aktualisieren sichern. Für Codespaces nur vorhandenes kostenloses Kontingent nutzen und den Codespace nach dem Test stoppen.
+Den **öffentlichen Publishable-Key** aus den Supabase-Projekteinstellungen verwenden; ein älterer öffentlicher Anon-Key ist ebenfalls mit dem Client verwendbar. Niemals `service_role`, Secret-Key oder Datenbankpasswort als `EXPO_PUBLIC_*` hinterlegen. `.env.local` ist ignoriert. Expo nach Änderungen neu starten (`npm start -- --clear`). Der öffentliche Client-Key wird bestimmungsgemäß in die App eingebunden; RLS schützt die Daten.
 
-## Prüfungen
+Migrationen im eigenen Supabase-Projekt in dieser Reihenfolge anwenden, beispielsweise einzeln im SQL Editor:
 
-```bash
-npm run check          # TypeScript, ESLint, Jest
-npm test               # Datenfilter, Persistenz, Standortadapter
-npm run export:web     # Web-Bundle nach dist/
-npm run export:native  # JavaScript-/Asset-Export für iOS und Android
-```
+1. `supabase/migrations/202610160001_wyldo.sql`
+2. `supabase/migrations/202610160002_storage.sql`
+3. `supabase/seed.sql`
 
-Die nativen Exporte erstellen keine signierten App-Binaries und benötigen keine Apple-/Google-Zugangsdaten.
+Migrationen einmal ausführen. Der Seed ist wiederholt ausführbar, solange seine Version ein Entwurf ist. Nach Veröffentlichung muss eine **neue Versions-ID** erzeugt werden. Bestehende Accounts erhalten ebenfalls ein Profil. E-Mail/Passwort-Authentifizierung aktivieren, E-Mail-Bestätigung und mindestens 12 Zeichen als Passwortpolicy im Dashboard einstellen. Der Client prüft die Mindestlänge bei Registrierung und Passwortänderung ebenfalls.
 
-Die Browsertests prüfen zusätzlich das von Expo Go abgerufene Android-Startmanifest: Seine SDK-Version muss zur installierten Expo-Version passen. Außerdem prüfen sie Navigation, Filter, Missionsdetails, die persistente Merkliste, Kartenvorschau und Fehlerzustände in einer mobilen Bildschirmgröße. Sie starten und beenden ihren eigenen Expo-Webserver auf Port 8081, sofern dort noch kein verwendbarer Server läuft:
+Unter Authentication → URL Configuration die tatsächlich verwendeten Rücksprungadressen erlauben: `wyldo://auth/callback`, die konkrete Expo-Go-Development-URL (`exp://…/--/auth/callback`) und für Web die tatsächliche Origin mit `/auth/callback`. Auch die Variante `?next=reset` berücksichtigen. Keine pauschalen Produktionswildcards verwenden. Für Bestätigung und Reset müssen E-Mail-Templates auf Supabases Bestätigungs-/PKCE-Flow eingestellt bleiben. Den angeforderten Link in derselben App und auf demselben Gerät öffnen. Eigene Development Builds mit stabilem `wyldo://`-Schema erleichtern Deep-Link-Tests; Expo-Go-URLs wechseln mit der Entwicklungsumgebung.
 
-```bash
-npx playwright install chromium
-npm run test:web
-```
+Nach Anmeldung lädt die App veröffentlichte Quest-Snapshots und den eigenen Serverstand, keine lokalen Mock-Quests. **Nach dem Seed ist die Live-Liste absichtlich leer:** Originalinhalt und Route sind noch nicht freigegeben. Die Anmeldung kann unabhängig davon geprüft werden. Der Entwicklungsmodus lädt denselben Inhaltsentwurf aus der Quelldatei.
 
-Wenn Chromium bereits installiert ist, kann stattdessen dessen Pfad gesetzt werden:
+Details zur Veröffentlichung, Storage, Rollen und Serveraktionen: [Backend](docs/backend.md).
 
-```bash
-PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:web
-```
+## Funktionen und Aufbau
 
-Die Tests simulieren Browser-Bedienung, keine nativen Karten oder echten GPS-Empfang. Auf Linux können zusätzliche Systembibliotheken für Chromium nötig sein (`npx playwright install --with-deps chromium`).
-
-## Projektstruktur
+- Registrierung, Login, Logout, Bestätigungs-/Reset-Callback und Passwortänderung über Supabase; geschützte Navigation, persistente Sessions und Token-Erneuerung.
+- Start, Questdetails, acht Kapitel mit Text-, Auswahl-, Reihenfolge-, Hör-/Text- und Coderätsel, Hinweise, vier Siegel, Abschluss und Profil.
+- Echte Kartenkomponenten: `react-native-maps` auf iOS/Android, Leaflet/OpenStreetMap im Browser. Noch **keine geprüften Stationspunkte oder Wanderlinie**.
+- Standortfreigabe, Genauigkeitsprüfung, veraltete/fehlende Signale, konfigurierbarer Radius und bleibende Freischaltung.
+- Kontogetrennter lokaler Speicher mit gemeinsamer Speicherung von Fortschritt und Warteschlange; idempotente Serversynchronisierung.
+- Quest-Download vorhandener Texte/Medien; keine Kartenkacheln. Neue echte Antworten offline zunächst vorläufig, keine Belohnung vor Serverprüfung.
+- Untertitel, deutsche Geräte-Sprachausgabe, Stumm-/Wiederhol-/Überspringsteuerung, Audio-Lebenszyklus, reduzierte Bewegung. **Freigegebenes Figurenasset fehlt**, daher ist Wyldo als Figur noch nicht fertig animiert.
 
 ```text
-src/
-  app/                     Expo-Router-Routen, Layouts und Fehlerseite
-    (tabs)/                Entdecken, Missionen, Karte
-    mission/[id].tsx       Missionsdetails mit Deep-Link-Unterstützung
-  components/              Wiederverwendbare UI und Landschaftsillustration
-  theme/                   Gemeinsame Farben und Layouts
-  features/
-    missions/              Typen, synthetische Daten, Repository, Zustand, Karten
-    bookmarks/             Validierung und geordnete AsyncStorage-Schreibzugriffe
-    map/                   Schematische Vorschau und ungenutzter nativer Adapter
-  services/location.ts     Nur explizit aufrufbarer Vordergrund-Standortadapter
-  __tests__/               Jest-Tests
-e2e/                       Playwright-Bedienungstests
+src/domain/               Questtypen, Reihenfolge, GPS-Regeln, Zustandsübergänge
+src/features/auth/        Session, sicherer nativer Tokenspeicher, Authentifizierung
+src/features/quest/       Datenbankzugriff und Anwendungskontext
+src/features/map/         Plattformkarten und Vordergrund-GPS
+src/features/dialogue/    Sprach-/Audiodatei-Steuerung und Untertitelzustand
+src/features/companion/   Austauschbarer Wyldo-Renderer und Assetvertrag
+src/features/offline/     Mediencache, Spielstand und geordnete Synchronisierung
+src/app/                  Expo-Router-Ansichten einschließlich Profil/Einstellungen
+content/                  Redaktionsentwurf und nur für Entwicklung/Seed gedachte Lösungen
+supabase/                 Migrationen und generierter, wiederholbarer Seed
 ```
 
-Routen enthalten die Bildschirmansichten; Datenzugriff und Fachlogik liegen außerhalb von `app/`. `MissionProvider` akzeptiert ein `MissionRepository` mit asynchronen `list()`- und `getById()`-Methoden. Standardmäßig verwendet er lokale Daten. Eine spätere Supabase-Implementierung kann diesen Adapter ersetzen; aktuell ist absichtlich weder ein Supabase-Client noch eine Datenbank nötig.
+Die früheren drei synthetischen WanderQuest-Missionen wurden durch die neue Queststruktur ersetzt. Alte Detail-URLs führen zu den aktuellen Questdetails.
 
-Die Merkliste bleibt lokal auf dem jeweiligen Gerät bzw. im jeweiligen Browser. Sie enthält nur Missions-IDs, keine vertraulichen Daten. Beim Zurücksetzen der App-Daten geht sie verloren. Es gibt keine Synchronisierung zwischen Geräten.
-
-## Karten und GPS später erweitern
-
-Die Detailansicht übergibt `missionId` an `/map`. Der sichtbare Kartenbereich rendert aktuell ausschließlich eine lokale SVG-Skizze. `src/features/map/native-map.native.tsx` enthält einen vorbereiteten `react-native-maps`-Adapter, der noch nicht eingebunden ist. Synthetische Koordinaten dürfen nicht als echte Wege verwendet werden.
-
-`requestForegroundPosition()` ist für eine spätere, ausdrücklich vom Nutzer gestartete Standortaktion vorbereitet. Berechtigungsablehnung und deaktivierte Ortungsdienste werden separat behandelt. Es gibt keine Hintergrundortung.
-
-`react-native-maps`, `expo-location` und AsyncStorage sind mit SDK-kompatiblen Versionen installiert und in Expo Go verfügbar. Für einen späteren eigenständigen Android-Build mit echten Google-Karten ist eine separate Maps-Konfiguration nötig. Das ist nicht Teil dieser Version und es wurde kein kostenpflichtiger Dienst eingerichtet.
-
-## Cloud-Entwicklungsumgebung
-
-Im vorbereiteten Cloud-Checkout liegt das Projekt unter `/workspace/wanderquest`. Falls der Standard-npm-Cache nicht beschreibbar ist, `npm_config_cache=/workspace/.npm-cache` setzen. `XDG_CACHE_HOME=/workspace/.cache` hält auch Debugger-Artefakte im beschreibbaren Workspace. Für die eingeschränkte Cloud-Netzwerkumgebung funktionieren die Expo-Befehle mit `EXPO_NO_TELEMETRY=1 EXPO_OFFLINE=1`; dabei werden lokale SDK-Kompatibilitätsdaten verwendet. Paketdownloads über npm behalten TLS- und Integritätsprüfung bei.
-
-Metro mit Fast Refresh ohne automatischen Browserstart auf der Cloud-Maschine starten:
+## Prüfen
 
 ```bash
-env -u CI BROWSER=none XDG_CACHE_HOME=/workspace/.cache \
-  EXPO_NO_TELEMETRY=1 EXPO_OFFLINE=1 npm_config_cache=/workspace/.npm-cache \
-  npm run web -- --offline --port 8081 --max-workers 2
+npm run check            # TypeScript, ESLint und Jest
+npm run test:database    # PostgreSQL/RLS/RPC mit PGlite, ohne externes Konto
+npm run test:web         # Chromium: kompletter Übungslauf, Formulare, Neustart
+npm run export:web
+npm run export:native    # iOS- und Android-JavaScript/Hermes, keine signierten Apps
+npm run format:check
 ```
 
-Vorher prüfen, ob Port 8081 bereits von einem eigenen Metro-Prozess genutzt wird. Bei belegtem Port keine fremden Prozesse beenden; den passenden bestehenden Server verwenden oder einen freien Port wählen. `CI=1` ist für automatisierte Prüfungen geeignet, deaktiviert aber den Watch-Modus für die Entwicklung.
+Für Playwright einmal Chromium mit `npx playwright install chromium` installieren oder `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` auf einen vorhandenen Browser setzen. Cloud: `/usr/bin/chromium`. Testdateien verwenden ausschließlich synthetische Accounts und Testkoordinaten. Sie ändern **nicht** das echte Supabase-Projekt.
 
-Installierte Dateien bleiben im Umgebungssnapshot erhalten; Metro muss in einer neuen Sitzung neu gestartet werden. Wiederverwendbare Installations- und Startanweisungen werden zusätzlich in der Cloud-Umgebungskonfiguration hinterlegt.
+Inhaltsänderungen: `content/externsteine.v1.json` und `content/solutions.private.json` bearbeiten, dann `npm run seed:generate`. Nur der explizite Entwicklungsmodus lädt die Lösungen lokal; veröffentlichte Datenbankdokumente enthalten weder Lösungsliste noch vorab lesbare Erfolgsantworten/Hinweistexte.
+
+[Prüfbericht und Screenshots](docs/verification.md) · [Route und Quellenstatus](docs/route-review.md) · [Figurenassets und Animation](docs/companion.md) · [Offline-Verhalten](docs/offline.md)
+
+## Plattformen und Kosten
+
+Die verwendeten Expo-Module sind für SDK 57 installiert. Expo Go genügt zum Übungstest. Diese Umgebung besitzt kein iOS-/Android-Gerät. Ein Hermes-Export ist kein Nachweis für GPS, native Karten, Keychain, E-Mail-Deep-Links, Stimmen oder Bildschirmtastaturen auf einem echten Smartphone.
+
+Für einen eigenen Android-Build ist `GOOGLE_MAPS_ANDROID_API_KEY` nötig; `app.config.ts` übernimmt ihn in die native Kartenkonfiguration. Key auf Package/Signatur beschränken. Google Maps benötigt je nach Kontokonfiguration ein Billing-Konto und kann Nutzungskosten verursachen. iOS verwendet standardmäßig Apple Maps. Kein kostenpflichtiger Dienst und kein EAS-Build wurde hier beauftragt oder gestartet. Supabase-Free-Plan und dessen E-Mail-/Speicherlimits beachten. Browserkarten nutzen die öffentliche OSM-Kachel-Infrastruktur nach deren [Nutzungsrichtlinie](https://operations.osmfoundation.org/policies/tiles/); keine Offline-Pakete oder Vorab-Massendownloads. Attribution bleibt sichtbar. Weitere Lizenz-/Nutzungsbedingungen der Anbieter gelten unverändert.

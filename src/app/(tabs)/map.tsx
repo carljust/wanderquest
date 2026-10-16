@@ -1,92 +1,87 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
 import { Text, View } from "react-native";
-import {
-  Brand,
-  Button,
-  Icon,
-  LoadingState,
-  Notice,
-  Screen,
-} from "@/components/ui";
-import { MissionMap } from "@/features/map/mission-map";
-import { useMissions } from "@/features/missions/provider";
-import { colors, layout } from "@/theme";
-
+import { Button, Notice, Screen } from "@/components/ui";
+import { QuestStatus } from "@/components/quest-ui";
+import { QuestMap } from "@/features/map/quest-map";
+import { useLocation } from "@/features/map/use-location";
+import { useQuest } from "@/features/quest/provider";
+import { layout } from "@/theme";
 export default function MapScreen() {
-  const { missionId } = useLocalSearchParams<{ missionId?: string }>();
-  const { missions, loading, error } = useMissions();
-  const mission = missionId
-    ? missions.find((value) => value.id === missionId)
-    : missions[0];
+  const q = useQuest();
+  const gps = useLocation();
   return (
     <Screen>
-      <Brand />
-      <View style={{ gap: 8 }}>
-        <Text style={layout.eyebrow}>BALD WIRD DER WEG INTERAKTIV</Text>
-        <Text style={layout.title}>Dein Abenteuer{"\n"}auf einen Blick.</Text>
-        <Text style={layout.body}>
-          Hier entsteht deine Missionskarte. Sieh dir schon jetzt an, wie
-          Entdeckerpunkte miteinander verbunden werden.
-        </Text>
-      </View>
-      {loading && <LoadingState />}
-      {error && <Notice warning>{error}</Notice>}
-      {!loading && !error && !mission && (
-        <Notice warning>
-          Diese Mission wurde nicht gefunden. Wähle eine andere Mission aus der
-          Übersicht.
+      <Text style={layout.eyebrow}>DEIN WEG INS ABENTEUER</Text>
+      <Text style={layout.title}>Draußen unterwegs.</Text>
+      <QuestStatus />
+      {q.quest ? (
+        <>
+          <QuestMap quest={q.quest} fix={gps.fix} />
+          <Notice warning>
+            {q.quest.routeStatus} Die Karte dient bis zur Freigabe nur der
+            Orientierung. Es werden keine ungeprüften Stationspunkte oder
+            Luftlinien als Wanderweg eingezeichnet.
+          </Notice>
+          <Text style={layout.body}>
+            Karte: online erforderlich. Auf dem Smartphone gelten die
+            Bedingungen von Apple Maps bzw. Google Maps; im Browser ©
+            OpenStreetMap-Mitwirkende.
+          </Text>
+        </>
+      ) : (
+        <Notice>Es ist noch keine veröffentlichte Route verfügbar.</Notice>
+      )}
+      <Button
+        label={
+          gps.busy
+            ? "Standort wird gesucht …"
+            : gps.watching
+              ? "Standort erneut bestimmen"
+              : "Standort freigeben"
+        }
+        icon="locate-outline"
+        disabled={gps.busy}
+        onPress={() => void gps.enable()}
+      />
+      {Boolean(gps.error) && <Notice warning>{gps.error}</Notice>}
+      {gps.fix && (
+        <Notice warning={gps.stale}>
+          GPS-Genauigkeit: ±{Math.round(gps.fix.accuracy)} m.{" "}
+          {gps.stale
+            ? "Signal veraltet – bitte erneut bestimmen."
+            : "Einmal freigeschaltete Stationen bleiben zugänglich."}
         </Notice>
       )}
-      {mission && (
-        <>
-          <MissionMap mission={mission} />
-          <View style={layout.card}>
-            <Text style={layout.eyebrow}>AUSGEWÄHLTE MISSION</Text>
-            <Text accessibilityRole="header" style={layout.heading}>
-              {mission.title}
-            </Text>
-            <Text style={layout.body}>
-              {mission.checkpoints.length} Beispielpunkte · {mission.region}
-            </Text>
+      <Text style={layout.heading}>Die acht Kapitel</Text>
+      {q.quest?.stations.map((s) => (
+        <View key={s.id} style={layout.card}>
+          <Text style={layout.eyebrow}>
+            STATION {s.order} ·{" "}
+            {q.run?.completed.includes(s.id)
+              ? "GESCHAFFT"
+              : q.run?.unlocked.includes(s.id)
+                ? "FREIGESCHALTET"
+                : "NOCH OFFEN"}
+          </Text>
+          <Text style={layout.heading}>{s.title}</Text>
+          <Text style={layout.body}>
+            {s.point ? s.place : "Standort noch nicht geprüft"}
+          </Text>
+          {(q.run?.unlocked.includes(s.id) ||
+            q.run?.completed.includes(s.id)) && (
             <Button
+              label={`Station ${s.order} öffnen`}
               secondary
-              label="Missionsdetails ansehen"
               onPress={() =>
                 router.push({
-                  pathname: "/mission/[id]",
-                  params: { id: mission.id },
+                  pathname: "/quest/play",
+                  params: { station: s.id },
                 })
               }
             />
-          </View>
-        </>
-      )}
-      <View style={layout.card}>
-        <View style={layout.row}>
-          <Icon name="navigate-outline" />
-          <Text style={layout.heading}>Der nächste Schritt</Text>
+          )}
         </View>
-        <Text style={layout.body}>
-          Später findest du hier eine interaktive Karte, deinen Standort und
-          deinen Missionsfortschritt. Aktuell werden weder Standortdaten
-          abgefragt noch aufgezeichnet.
-        </Text>
-        <View style={[layout.row, { flexWrap: "wrap" }]}>
-          <Icon name="checkmark-circle-outline" size={18} color={colors.pine} />
-          <Text style={{ color: colors.pine, fontSize: 13 }}>
-            Navigation und Kartenbereich vorbereitet
-          </Text>
-        </View>
-      </View>
-      <Button
-        label="Andere Mission wählen"
-        secondary
-        onPress={() => router.push("/missions")}
-      />
-      <Notice warning>
-        Schematische Demo, keine echte Wanderkarte. Die Beispielpunkte und ihre
-        Verbindung sind frei erfunden und dienen keiner Navigation.
-      </Notice>
+      ))}
     </Screen>
   );
 }
