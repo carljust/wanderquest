@@ -12,6 +12,10 @@ import { styles } from "@/components/quest-ui";
 import { useAuth } from "@/features/auth/provider";
 import { backendConfigured, config } from "@/lib/config";
 import { friendlyError } from "@/lib/supabase";
+import {
+  googleNativeBuildRequired,
+  signInWithGoogle,
+} from "@/features/auth/google";
 import { submitAuth } from "@/features/auth/service";
 import { layout } from "@/theme";
 export default function Login() {
@@ -21,6 +25,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   if (auth.session || auth.practice) return <Redirect href="/" />;
@@ -41,7 +46,7 @@ export default function Login() {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
-      <Screen>
+      <Screen bottomInset>
         <Brand />
         <View style={{ gap: 12, paddingTop: 20 }}>
           <Text style={layout.eyebrow}>DEIN ABENTEUER BEGINNT HIER</Text>
@@ -68,6 +73,46 @@ export default function Login() {
           <Notice warning>{error || auth.error}</Notice>
         )}
         {Boolean(notice) && <Notice>{notice}</Notice>}
+        {mode !== "reset" && (
+          <View style={{ gap: 12 }}>
+            <Button
+              label={
+                googleBusy ? "Google wird geöffnet …" : "Mit Google anmelden"
+              }
+              icon="logo-google"
+              secondary
+              disabled={busy}
+              onPress={() => {
+                setBusy(true);
+                setGoogleBusy(true);
+                setError("");
+                setNotice("");
+                void signInWithGoogle()
+                  .then((result) => {
+                    if (result === "cancelled")
+                      setNotice(
+                        "Google-Anmeldung abgebrochen. Du kannst es erneut versuchen.",
+                      );
+                  })
+                  .catch((e) => setError(friendlyError(e)))
+                  .finally(() => {
+                    setBusy(false);
+                    setGoogleBusy(false);
+                  });
+              }}
+            />
+            {googleNativeBuildRequired() && (
+              <Notice>
+                Google-Anmeldung ist in der Browser-App und im eigenen
+                Wyldo-Development-Build verfügbar. In Expo Go kannst du weiter
+                mit E-Mail und Passwort oder im Übungsmodus testen.
+              </Notice>
+            )}
+            <Text style={[layout.eyebrow, { textAlign: "center" }]}>
+              ODER MIT E-MAIL UND PASSWORT
+            </Text>
+          </View>
+        )}
         <View style={{ gap: 12 }}>
           <Text style={styles.label}>E-Mail-Adresse</Text>
           <TextInput

@@ -38,6 +38,7 @@ export type QuestAsset = {
   kind: "image" | "audio" | "animation";
   url: string | null;
   description: string;
+  bundled?: "scenes" | "fox" | "seals";
 };
 export type Quest = {
   id: string;

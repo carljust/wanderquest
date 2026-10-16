@@ -1,0 +1,77 @@
+[
+  {
+    "id": "10544136713",
+    "name": "Wegweiser „Infozentrum Externsteine“",
+    "point": {
+      "latitude": 51.8683056,
+      "longitude": 8.9236213
+    },
+    "source": "https://www.openstreetmap.org/node/10544136713",
+    "checkedAt": "2026-10-16",
+    "status": "desk_checked",
+    "osmType": "node",
+    "osmVersion": 2,
+    "osmUpdatedAt": "2023-11-04T08:17:20Z",
+    "apiSource": "https://api.openstreetmap.org/api/0.6/node/10544136713.json"
+  },
+  {
+    "id": "5483282173",
+    "name": "Wegweiser „Externsteine Südseite“",
+    "point": {
+      "latitude": 51.8684932,
+      "longitude": 8.9167329
+    },
+    "source": "https://www.openstreetmap.org/node/5483282173",
+    "checkedAt": "2026-10-16",
+    "status": "desk_checked",
+    "osmType": "node",
+    "osmVersion": 13,
+    "osmUpdatedAt": "2025-06-08T11:50:03Z",
+    "apiSource": "https://api.openstreetmap.org/api/0.6/node/5483282173.json"
+  },
+  {
+    "id": "5909732105",
+    "name": "Wegweiser „Knickenhagen IV“",
+    "point": {
+      "latitude": 51.8650817,
+      "longitude": 8.922974
+    },
+    "source": "https://www.openstreetmap.org/node/5909732105",
+    "checkedAt": "2026-10-16",
+    "status": "desk_checked",
+    "osmType": "node",
+    "osmVersion": 6,
+    "osmUpdatedAt": "2025-06-08T10:35:07Z",
+    "apiSource": "https://api.openstreetmap.org/api/0.6/node/5909732105.json"
+  },
+  {
+    "id": "5483282172",
+    "name": "Externsteine Naturerlebnispfade",
+    "point": {
+      "latitude": 51.86788,
+      "longitude": 8.9157458
+    },
+    "source": "https://www.openstreetmap.org/node/5483282172",
+    "checkedAt": "2026-10-16",
+    "status": "desk_checked",
+    "osmType": "node",
+    "osmVersion": 4,
+    "osmUpdatedAt": "2025-03-27T07:57:11Z",
+    "apiSource": "https://api.openstreetmap.org/api/0.6/node/5483282172.json"
+  },
+  {
+    "id": "7122025636",
+    "name": "Wegweiser „Externsteine“",
+    "point": {
+      "latitude": 51.8689687,
+      "longitude": 8.9178219
+    },
+    "source": "https://www.openstreetmap.org/node/7122025636",
+    "checkedAt": "2026-10-16",
+    "status": "desk_checked",
+    "osmType": "node",
+    "osmVersion": 7,
+    "osmUpdatedAt": "2025-06-08T11:50:03Z",
+    "apiSource": "https://api.openstreetmap.org/api/0.6/node/7122025636.json"
+  }
+]

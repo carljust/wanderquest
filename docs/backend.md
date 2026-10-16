@@ -1,6 +1,6 @@
 # Backend und Veröffentlichungen
 
-Das vorhandene Supabase-Projekt wurde nicht verändert: öffentlicher Client-Key, administrative Datenbankverbindung und aktive Netzwerkfreigabe fehlen. Migrationen wurden lokal in einer echten PostgreSQL-Engine (PGlite/WASM) ausgeführt. Supabase Auth, PostgREST, GoTrue und Storage-HTTP wurden dabei nicht nachgebildet; die SQL-Tests setzen `auth.uid()` über einen synthetischen JWT-Subject.
+Das vorhandene Supabase-Projekt wurde nicht verändert: öffentlicher Client-Key und administrative Datenbankverbindung fehlen. Der Auth-Endpunkt ist inzwischen erreichbar; ein HTTP 401 ohne Key bestätigt keine funktionierende Anmeldung. Migrationen wurden lokal in einer echten PostgreSQL-Engine (PGlite/WASM) ausgeführt. Supabase Auth, PostgREST, GoTrue und Storage-HTTP wurden dabei nicht nachgebildet; die SQL-Tests setzen `auth.uid()` über einen synthetischen JWT-Subject.
 
 ## Datenmodell
 
@@ -21,11 +21,11 @@ GPS-Daten stammen vom Gerät. Die Prüfung von Radius, Genauigkeit und Reihenfol
 
 ## Bilder, Audio und Rig
 
-Privater Storage-Bucket `quest-assets`. Spieler dürfen nur Objekte lesen, deren Pfad über `quest_assets` einer veröffentlichten Version referenziert wird. Uploads/Änderungen erfolgen durch Administration, nicht die App. Der Client erzeugt signierte Leselinks mit 24 Stunden Laufzeit und lädt vorhandene Dateien für Offline-Nutzung dauerhaft lokal herunter. Nach Ablauf der Links Quest online aktualisieren; lokale Downloads bleiben nutzbar. Fehlende Medien werden ausdrücklich ausgewiesen. Rive wird nicht eingebunden; der Figurenvertrag liegt im Code und in `companion.md`.
+Privater Storage-Bucket `quest-assets`. Spieler dürfen nur Objekte lesen, deren Pfad über `quest_assets` einer veröffentlichten Version referenziert wird. Uploads/Änderungen erfolgen durch Administration, nicht die App. Der Client erzeugt signierte Leselinks mit 24 Stunden Laufzeit und lädt vorhandene Dateien für Offline-Nutzung dauerhaft lokal herunter. Nach Ablauf der Links Quest online aktualisieren; lokale Downloads bleiben nutzbar. Die aktuellen Illustrationen/Posen/Siegel sind zusätzlich lokal im App-Bundle vorhanden und im Assetkatalog mit `bundled` gekennzeichnet. Fehlende weitere Medien werden ausdrücklich ausgewiesen. Rive wird nicht eingebunden; der Figurenvertrag liegt im Code und in `companion.md`.
 
 ## Erstveröffentlichung
 
-Zuerst Originaltexte und Design abgleichen, freigegebene Medien einpflegen, Quelle/Datum/OSM-Objekt oder amtlichen Geodatensatz für jede Koordinate dokumentieren, echte Weggeometrie übernehmen und die Route vor Ort begehen. Danach Quelldokument mit `approval: approved`, `fieldReady: true`, vollständiger tatsächlicher Route und acht `field_checked`-Stationen als **neue** geprüfte Version ausarbeiten. Radiuswerte vor Ort testen. Auch Streckenlänge, Dauer und Startbeschreibung messen/prüfen.
+Das gelieferte Mockup und die Charakterreferenz sind inzwischen berücksichtigt. Vor der Outdoor-Veröffentlichung Inhalte redaktionell abnehmen, finale Medien einpflegen, Quelle/Datum/OSM-Objekt oder amtlichen Geodatensatz für jede Koordinate dokumentieren, echte Weggeometrie übernehmen und die Route vor Ort begehen. Danach Quelldokument mit `approval: approved`, `fieldReady: true`, vollständiger tatsächlicher Route und acht `field_checked`-Stationen als **neue** geprüfte Version ausarbeiten. Radiuswerte vor Ort testen. Auch Streckenlänge, Dauer und Startbeschreibung messen/prüfen.
 
 Der aktuelle Generator setzt absichtlich `draft`, `pending_source_review`, `field_ready=false` und keine Koordinaten. Er ist für den vorhandenen Entwurf bestimmt und **kein Freigabewerkzeug**. Die spätere freigegebene Version braucht eine eigene Datenmigration, die normalisierte Stationskoordinaten und das öffentliche Dokument konsistent einfügt, Lösungen/Feedback privat ablegt und erst zum Schluss veröffentlicht. Ein bloßes Umschalten von `status` wäre keine fachliche Freigabe. Die App und Startfunktion blockieren unvollständig freigegebene Daten.
 

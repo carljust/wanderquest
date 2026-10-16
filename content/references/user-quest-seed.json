@@ -1,0 +1,184 @@
+{
+  "id": "wyldo-externsteine-verlorener-schatz",
+  "slug": "der-verlorene-schatz-der-externsteine",
+  "title": "Der verlorene Schatz der Externsteine",
+  "subtitle": "Fünf Zeichen. Ein vergessener Kompass. Ein Geheimnis im Teutoburger Wald.",
+  "brand": "Wyldo",
+  "language": "de",
+  "status": "draft_needs_onsite_verification",
+  "setting": "Externsteine / Horn-Bad Meinberg",
+  "difficulty": "Leicht",
+  "ageRecommendation": "ab 7 Jahren mit Begleitung",
+  "expectedWalkingDistanceKm": 2.55,
+  "estimatedPlayMinutes": 85,
+  "sourceRoute": {
+    "name": "Knickenhagen OH! 6 – familienfreundlicher Natur-Erlebnisrundweg",
+    "officialPage": "https://www.teutoburgerwald.de/natur/in-der-natur/tour/kinder-erlebnis-route-knickhagen-an-den-externsteinen-oh-6",
+    "officialGpxDownload": "https://www.teutoburgerwald.de/?elevations=true&limit=1&mkt=de&ndsajax=destination-data-proxy&no_cache=1&q=globalid%3At_100234386&template=gpx&times=true",
+    "note": "Amtlichen GPX-Track importieren und die Zwischenstationen auf zugängliche, markierte Wege projizieren. Referenzpunkte sind reale kartierte Orte, aber keine vor Ort validierten GPS-Auslösepunkte. Distanz gilt für offizielle OH6-Strecke, nicht für die direkte Verbindung dieser Referenzpunkte."
+  },
+  "story": {
+    "premise": "Die fiktive Kartografin Alva hat vor langer Zeit einen magischen Sternenkompass zurückgelassen. Nur wer die vier Zeichen des Waldes findet, kann den digitalen Schatz öffnen.",
+    "disclaimer": "Fiktive Geschichte: Es gibt keinen vergrabenen Gegenstand. Keine Schatzsuche abseits der Wege, kein Berühren oder Beklettern der Felsen erforderlich.",
+    "intro": "Zwischen alten Bäumen und gewaltigen Felsen wartet Alvas vergessener Sternenkompass. Vier Zeichen führen dich zum letzten Rätsel. Bist du bereit?",
+    "outro": "Die Zeichen ergeben STEIN. Der Sternenkompass erwacht — dein erster Wyldo-Schatz ist gefunden!"
+  },
+  "safety": {
+    "onMarkedTrailsOnly": true,
+    "noClimbingOrOffTrailExploration": true,
+    "noPhysicalCache": true,
+    "gpsRequiresForegroundPermission": true,
+    "minRecommendedGpsAccuracyMeters": 35,
+    "defaultTriggerRadiusMeters": 45,
+    "allowManualUnlockWhenGpsInaccurate": true,
+    "onsiteVerificationRequiredBeforePublicRelease": true,
+    "noGuaranteeOfAccessibility": "Gelände mit Pfaden und Steigungen; keine Barrierefreiheit zugesichert",
+    "doNotGuideToSummitsOrCliffs": "Kartenpunkte erst auf offiziellen GPX-Weg ziehen und vor Ort testen"
+  },
+  "referencePoints": [
+    {
+      "id": "start",
+      "name": "Infozentrum Externsteine",
+      "latitude": 51.86831,
+      "longitude": 8.92362,
+      "source": "https://mapcarta.com/de/N10544136713",
+      "kind": "poi_reference",
+      "mustSnapToOfficialRoute": true
+    },
+    {
+      "id": "heide",
+      "name": "Knickenhagen IV Informationstafel",
+      "latitude": 51.86508,
+      "longitude": 8.92297,
+      "source": "https://mapcarta.com/de/N5909732105",
+      "kind": "poi_reference",
+      "mustSnapToOfficialRoute": true
+    },
+    {
+      "id": "naturweg",
+      "name": "Externsteine Naturerlebnispfade Information",
+      "latitude": 51.86788,
+      "longitude": 8.91575,
+      "source": "https://mapcarta.com/de/N5483282172",
+      "kind": "poi_reference",
+      "mustSnapToOfficialRoute": true
+    },
+    {
+      "id": "suedseite",
+      "name": "Externsteine Südseite Information",
+      "latitude": 51.86849,
+      "longitude": 8.91673,
+      "source": "https://mapcarta.com/de/N5483282173",
+      "kind": "poi_reference",
+      "mustSnapToOfficialRoute": true
+    },
+    {
+      "id": "fels",
+      "name": "Externsteine Infomarker am Felsgelände",
+      "latitude": 51.86897,
+      "longitude": 8.91782,
+      "source": "https://mapcarta.com/N7122025636",
+      "kind": "poi_reference",
+      "mustSnapToOfficialRoute": true
+    }
+  ],
+  "stages": [
+    {
+      "id": "s1",
+      "referencePointId": "start",
+      "title": "Alvas letzter Brief",
+      "type": "intro_and_choice",
+      "dialog": "Zwischen den Felsen liegt ein Rätsel verborgen. Ich habe vier Zeichen gefunden, aber ihre Reihenfolge vergessen!",
+      "challenge": {
+        "question": "Welches Werkzeug hilft uns, Himmelsrichtungen zu finden?",
+        "options": ["Kompass", "Lupe", "Laterne"],
+        "correctAnswer": "Kompass",
+        "hint": "Unser kleiner Fuchs trägt eines um den Hals."
+      },
+      "onSuccess": {
+        "fragment": "S",
+        "xp": 20
+      }
+    },
+    {
+      "id": "s2",
+      "referencePointId": "heide",
+      "title": "Die Hüter der Heide",
+      "type": "choice",
+      "dialog": "Hier oben ist die Landschaft anders. Alvas zweites Zeichen ist bei den Hütern der Heide verborgen.",
+      "challenge": {
+        "question": "Welche Tiere helfen dabei, die Heide offen zu halten?",
+        "options": ["Schafe und Ziegen", "Kamele", "Pinguine"],
+        "correctAnswer": "Schafe und Ziegen",
+        "hint": "Sie grasen und fressen junge Triebe."
+      },
+      "onSuccess": {
+        "fragment": "T",
+        "xp": 20
+      }
+    },
+    {
+      "id": "s3",
+      "referencePointId": "naturweg",
+      "title": "Die Sprache des Waldes",
+      "type": "choice",
+      "dialog": "Jeder Ort erzählt eine Geschichte. Schau auf die Zeichen in meiner alten Karte.",
+      "challenge": {
+        "question": "Welches Wort ergänzt das Paar: Baum → Holz, Fels → ?",
+        "options": ["Wasser", "Stein", "Blatt"],
+        "correctAnswer": "Stein",
+        "hint": "Daraus bestehen die großen Felsen."
+      },
+      "onSuccess": {
+        "fragment": "E",
+        "xp": 20
+      }
+    },
+    {
+      "id": "s4",
+      "referencePointId": "suedseite",
+      "title": "Das Wissen des Felsens",
+      "type": "choice",
+      "dialog": "Die alten Felsen bewahren unser viertes Zeichen. Zum Lösen müssen wir nichts anfassen.",
+      "challenge": {
+        "question": "Aus welchem Gestein bestehen die Externsteine überwiegend?",
+        "options": ["Sandstein", "Marmor", "Granit"],
+        "correctAnswer": "Sandstein",
+        "hint": "Der Name des Gesteins beginnt mit Sand."
+      },
+      "onSuccess": {
+        "fragment": "I",
+        "xp": 20
+      }
+    },
+    {
+      "id": "s5",
+      "referencePointId": "fels",
+      "title": "Die letzte Rune",
+      "type": "text",
+      "dialog": "Du hast S, T, E und I gesammelt. Welches Wort vervollständigt Alvas Botschaft?",
+      "challenge": {
+        "question": "Vervollständige das fünfstellige Lösungswort: S T E I _",
+        "correctAnswer": "STEIN",
+        "acceptedAnswers": ["stein", "STEIN"],
+        "hint": "Es ist das Wort, das zu diesen Felsen passt."
+      },
+      "onSuccess": {
+        "reward": "Sternenkompass (digital)",
+        "xp": 50,
+        "completed": true
+      }
+    }
+  ],
+  "gameplay": {
+    "unlockMode": "sequential",
+    "persistToSupabase": true,
+    "localOfflineCacheDesired": true,
+    "gpsSimulationDevOnly": true,
+    "manualFallback": "Erreichbarkeit im Test ohne unzutreffende GPS-Positionsbehauptungen sicherstellen"
+  },
+  "licenseNotes": [
+    "Keine Rätsel oder Grafiken aus der vorhandenen Naturpark-Rallye übernehmen. Nur offizielle Route als Wegreferenz nutzen und Kartendatenlizenzen beachten.",
+    "Reale Koordinaten stammen aus offenen POI-Kartierungen; vor Veröffentlichung ist ein Weg- und Sicherheitscheck vor Ort zwingend."
+  ]
+}

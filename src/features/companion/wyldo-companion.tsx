@@ -1,27 +1,36 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useFocusEffect } from "expo-router";
 import {
   AccessibilityInfo,
   Animated,
   Image,
+  Platform,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import type { CompanionState } from "@/domain/quest";
 import { companionAssets } from "./assets";
-import { colors } from "@/theme";
-import { Icon } from "@/components/ui";
+import { FoxPose } from "@/components/artwork";
 
 export function WyldoCompanion({
   state = "idle",
   reducedMotion = false,
   mouthPulse = 0,
+  size = 180,
 }: {
   state?: CompanionState;
   reducedMotion?: boolean;
   mouthPulse?: number;
+  size?: number;
 }) {
   const [systemReduced, setSystemReduced] = useState(false);
+  const [focused, setFocused] = useState(false);
+  useFocusEffect(
+    useCallback(() => {
+      setFocused(true);
+      return () => setFocused(false);
+    }, []),
+  );
   useEffect(() => {
     void AccessibilityInfo.isReduceMotionEnabled().then(setSystemReduced);
     const listener = AccessibilityInfo.addEventListener(
@@ -30,7 +39,7 @@ export function WyldoCompanion({
     );
     return () => listener.remove();
   }, []);
-  const reduce = reducedMotion || systemReduced;
+  const reduce = reducedMotion || systemReduced || !focused;
   const [motion] = useState(() => new Animated.Value(0));
   const [blink, setBlink] = useState(false);
   const mouth = state === "talk" && !reduce && mouthPulse % 2 === 1;
@@ -42,12 +51,12 @@ export function WyldoCompanion({
         Animated.timing(motion, {
           toValue: 1,
           duration: state === "celebrate" ? 450 : 1800,
-          useNativeDriver: true,
+          useNativeDriver: Platform.OS !== "web",
         }),
         Animated.timing(motion, {
           toValue: 0,
           duration: state === "celebrate" ? 450 : 1800,
-          useNativeDriver: true,
+          useNativeDriver: Platform.OS !== "web",
         }),
       ]),
     );
@@ -69,11 +78,14 @@ export function WyldoCompanion({
   }, [reduce]);
   const rig = companionAssets.rig;
   return (
-    <View style={styles.frame} accessibilityLabel={`Wyldo, Zustand ${state}`}>
+    <View
+      style={[styles.frame, { minHeight: size }]}
+      accessibilityLabel={`Wyldo, Zustand ${state}`}
+    >
       <Animated.View
         style={{
-          width: 158,
-          height: 164,
+          width: size,
+          height: size,
           transform: [
             {
               translateY: motion.interpolate({
@@ -125,11 +137,18 @@ export function WyldoCompanion({
         ) : companionAssets.portrait ? (
           <Image source={companionAssets.portrait} style={styles.layer} />
         ) : (
-          <View style={styles.missing}>
-            <Icon name="compass-outline" size={42} color={colors.pine} />
-            <Text style={styles.label}>Wyldo</Text>
-            <Text style={styles.caption}>Figur noch nicht hinterlegt</Text>
-          </View>
+          <FoxPose
+            pose={
+              state === "celebrate"
+                ? 3
+                : state === "wave"
+                  ? 1
+                  : state === "talk" || state === "surprise"
+                    ? 2
+                    : 0
+            }
+            size={size}
+          />
         )}
       </Animated.View>
     </View>
@@ -143,14 +162,4 @@ const styles = StyleSheet.create({
     height: "100%",
     resizeMode: "contain",
   },
-  missing: {
-    flex: 1,
-    gap: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 70,
-    backgroundColor: colors.moss,
-  },
-  label: { fontSize: 21, color: colors.forest, fontWeight: "800" },
-  caption: { color: colors.muted, fontSize: 10 },
 });

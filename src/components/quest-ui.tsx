@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { artwork, AtlasImage, Scene } from "./artwork";
 import { Button, Icon, Notice } from "./ui";
 import { useQuest } from "@/features/quest/provider";
 import { useAuth } from "@/features/auth/provider";
 import { resolveAsset } from "@/features/offline/assets";
 import { colors, layout } from "@/theme";
 
-export function QuestStatus() {
+export function QuestStatus({ quiet = false }: { quiet?: boolean }) {
   const q = useQuest();
   const auth = useAuth();
   return (
@@ -40,7 +41,7 @@ export function QuestStatus() {
           />
         </>
       )}
-      {Boolean(q.notice) && <Notice>{q.notice}</Notice>}
+      {!quiet && Boolean(q.notice) && <Notice>{q.notice}</Notice>}
     </View>
   );
 }
@@ -81,14 +82,17 @@ export function QuestCover({
           accessibilityLabel="Quest-Illustration"
         />
       ) : (
-        <>
-          <View style={styles.circle} />
-          <Icon name="map-outline" size={compact ? 44 : 70} color="#D7BE8D" />
-          <Text style={styles.coverText}>EINE KARTE. VIER SIEGEL.</Text>
-          <Text style={styles.coverCaption}>
-            Freigegebenes Questmotiv noch ausstehend
-          </Text>
-        </>
+        <Scene
+          panel={
+            assetId === "station-4"
+              ? 1
+              : assetId === "station-5"
+                ? 2
+                : assetId === "station-8"
+                  ? 3
+                  : 0
+          }
+        />
       )}
     </View>
   );
@@ -115,24 +119,41 @@ export function ProgressStrip() {
           ]}
         />
       </View>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
-        {["Mut", "Neugier", "Zuhören", "Gemeinschaft"].map((seal) => (
+      <View style={{ flexDirection: "row", gap: 4 }}>
+        {["Mut", "Neugier", "Zuhören", "Gemeinschaft"].map((seal, index) => (
           <View
             key={seal}
-            style={[
-              styles.seal,
-              run?.seals.includes(seal) && { backgroundColor: colors.moss },
-            ]}
+            accessibilityLabel={`Steinsiegel ${seal} · ${run?.seals.includes(seal) ? "gesammelt" : "noch offen"}`}
+            style={{ flex: 1, alignItems: "center", gap: 4 }}
           >
+            <AtlasImage
+              source={artwork.seals}
+              index={index}
+              contain
+              style={{
+                width: "100%",
+                maxWidth: 68,
+                aspectRatio: 1,
+                opacity: run?.seals.includes(seal) ? 1 : 0.28,
+              }}
+            />
+            <Text
+              style={{
+                fontSize: 10,
+                color: colors.forest,
+                textAlign: "center",
+              }}
+            >
+              {seal}
+            </Text>
             <Icon
               name={
                 run?.seals.includes(seal)
                   ? "checkmark-circle"
                   : "ellipse-outline"
               }
-              size={16}
+              size={13}
             />
-            <Text style={{ fontSize: 12, color: colors.forest }}>{seal}</Text>
           </View>
         ))}
       </View>
@@ -193,16 +214,7 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     overflow: "hidden",
   },
-  fill: { height: 5, backgroundColor: colors.orange },
-  seal: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 5,
-    padding: 7,
-    borderWidth: 1,
-    borderColor: colors.line,
-    borderRadius: 12,
-  },
+  fill: { height: 5, backgroundColor: colors.forest },
   input: {
     borderWidth: 1,
     borderColor: colors.line,

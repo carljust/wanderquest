@@ -116,6 +116,12 @@ export default function Profile() {
       {Boolean(notice) && <Notice>{notice}</Notice>}
       <Text style={layout.heading}>Deine Erfolge</Text>
       <ProgressStrip />
+      <Button
+        label="Fortschritt ansehen"
+        secondary
+        icon="trail-sign-outline"
+        onPress={() => router.push("/quest/progress")}
+      />
       {awards.length ? (
         awards.map((a) => (
           <View key={a.id} style={layout.card}>

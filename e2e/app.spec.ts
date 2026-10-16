@@ -1,9 +1,25 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { dependencies } from "../package.json";
 import answers from "../content/solutions.private.json";
 import quest from "../content/externsteine.v1.json";
 const screenshotDirectory =
   process.env.WYLDO_SCREENSHOT_DIR ?? "test-results/screenshots";
+async function capture(page: Page, name: string, focus?: string) {
+  // Native-style screens scroll in a nested ScrollView, not the document.
+  await page.evaluate(() => {
+    document.querySelectorAll("*").forEach((element) => {
+      if (element.scrollTop) element.scrollTop = 0;
+    });
+  });
+  if (focus)
+    await page
+      .getByText(focus, { exact: true })
+      .evaluate((element) => element.scrollIntoView({ block: "start" }));
+  await page.screenshot({
+    path: `${screenshotDirectory}/${name}.png`,
+    animations: "disabled",
+  });
+}
 
 test("Android Expo Go manifest targets SDK 57", async ({ request }) => {
   const response = await request.get("/", {
@@ -37,18 +53,14 @@ test("eight-station practice quest, hints, persistence, mute, finish and profile
   });
   await page.goto("/");
   await expect(page.getByText("Willkommen draußen.")).toBeVisible();
-  await page.screenshot({
-    path: `${screenshotDirectory}/login.png`,
-    fullPage: true,
-  });
+  await capture(page, "login");
   await page
     .getByRole("button", { name: "Ohne Konto im Entwicklungsmodus testen" })
     .click();
-  await expect(page.getByText("Geh los.")).toBeVisible();
-  await page.screenshot({
-    path: `${screenshotDirectory}/home.png`,
-    fullPage: true,
-  });
+  await expect(
+    page.getByText("Entdecke. Erlebe. Beschütze.", { exact: false }),
+  ).toBeVisible();
+  await capture(page, "home");
   await page
     .getByRole("button", { name: "Abenteuer entdecken", exact: true })
     .click();
@@ -57,13 +69,10 @@ test("eight-station practice quest, hints, persistence, mute, finish and profile
     .click();
   await expect(
     page
-      .getByText(/Vorhandene Texte und Medien gespeichert/)
+      .getByText(/Questtexte und Bilder sind offline verfügbar/)
       .filter({ visible: true }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${screenshotDirectory}/details.png`,
-    fullPage: true,
-  });
+  await capture(page, "details");
   await page.getByRole("button", { name: "Übungsabenteuer starten" }).click();
   for (const station of quest.stations) {
     await expect(page.getByText(station.title, { exact: true })).toBeVisible();
@@ -71,11 +80,7 @@ test("eight-station practice quest, hints, persistence, mute, finish and profile
     await expect(
       page.getByRole("button", { name: "Dialog überspringen · zur Aufgabe" }),
     ).toBeVisible();
-    if (station.order === 1)
-      await page.screenshot({
-        path: `${screenshotDirectory}/dialogue.png`,
-        fullPage: true,
-      });
+    if (station.order === 1) await capture(page, "dialogue");
     await page
       .getByRole("button", { name: "Dialog überspringen · zur Aufgabe" })
       .click();
@@ -108,11 +113,17 @@ test("eight-station practice quest, hints, persistence, mute, finish and profile
           })
           .click();
     else await page.getByLabel("Deine Antwort", { exact: true }).fill(solution);
-    if (station.order === 4)
-      await page.screenshot({
-        path: `${screenshotDirectory}/puzzle.png`,
-        fullPage: true,
-      });
+    if (station.order === 4) {
+      await page.setViewportSize({ width: 320, height: 640 });
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      ).toBeTruthy();
+      await capture(page, "small-quest", "Deine Aufgabe");
+      await page.setViewportSize({ width: 390, height: 844 });
+      await capture(page, "puzzle", "Deine Aufgabe");
+    }
     await page.getByRole("button", { name: "Antwort prüfen" }).click();
     await expect(page.getByText("Gut gemacht.", { exact: true })).toBeVisible();
     await page
@@ -135,7 +146,7 @@ test("eight-station practice quest, hints, persistence, mute, finish and profile
           .click();
       await page.goto("/quest/play");
       await expect(
-        page.getByText("Runas leise Botschaft", { exact: true }),
+        page.getByText("Das Geheimnis des Wassers", { exact: true }),
       ).toBeVisible();
     } else if (station.order < 8)
       await page.getByRole("button", { name: "Zur nächsten Station" }).click();
@@ -146,25 +157,34 @@ test("eight-station practice quest, hints, persistence, mute, finish and profile
   await expect(
     page.getByText("Vorschau im Übungslauf · kein reguläres Abzeichen."),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${screenshotDirectory}/finish.png`,
-    fullPage: true,
-  });
+  await capture(page, "finish");
   await page.getByRole("button", { name: "Zum Profil", exact: true }).click();
+  await page.getByRole("button", { name: "Fortschritt ansehen" }).click();
+  await expect(
+    page.getByText("Dein Fortschritt", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Station 8:.*geschafft/ }),
+  ).toBeEnabled();
+  await capture(page, "progress");
+  await page.getByRole("button", { name: "Zurück", exact: true }).click();
   await page.getByRole("switch", { name: "Bewegung reduzieren" }).click();
   await expect(
     page.getByRole("switch", { name: "Bewegung reduzieren" }),
   ).toBeChecked();
-  await page.screenshot({
-    path: `${screenshotDirectory}/profile.png`,
-    fullPage: true,
-  });
+  await capture(page, "profile");
   await page.goto("/map");
   await expect(page.getByText("Draußen unterwegs.")).toBeVisible();
-  await page.screenshot({
-    path: `${screenshotDirectory}/map.png`,
-    fullPage: true,
+  await expect(page.locator(".leaflet-tile-loaded").first()).toBeVisible({
+    timeout: 15000,
   });
+  await expect(page.getByText("Karte wird geladen …")).toHaveCount(0);
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll<HTMLImageElement>(".leaflet-tile")].every(
+      (image) => image.complete && image.naturalWidth > 0,
+    ),
+  );
+  await capture(page, "map");
   expect(errors).toEqual([]);
 });
 
@@ -187,10 +207,7 @@ test("small screen forms, validation and protected route", async ({ page }) => {
       () => document.documentElement.scrollWidth <= window.innerWidth,
     ),
   ).toBeTruthy();
-  await page.screenshot({
-    path: `${screenshotDirectory}/small-register.png`,
-    fullPage: true,
-  });
+  await capture(page, "small-register");
   await page
     .getByRole("button", { name: "Zur Anmeldung", exact: true })
     .click();
@@ -229,6 +246,6 @@ test("downloaded practice content plays offline and survives reconnect and reloa
   await context.setOffline(false);
   await page.reload();
   await expect(
-    page.getByText("Das Siegel des Mutes", { exact: true }),
+    page.getByText("Das erste Steinsiegel", { exact: true }),
   ).toBeVisible();
 });

@@ -1,25 +1,35 @@
 # Externsteine: Route und Quellenstatus
 
-**Keine Route freigegeben, keine Stationskoordinate als geprüft übernommen.** Die drei früheren Missionen enthielten ausschließlich synthetische Daten anderer Gebiete; daraus wurde kein Externsteine-Punkt übernommen. Alle acht `point`-Werte sind `null`, alle Stationsorte lediglich Vorschläge, die Route ein leeres Array. Strecke und Dauer werden nicht geschätzt.
+**Noch keine Outdoor-Route freigegeben.** Fünf reale Orientierungspunkte wurden am 16.10.2026 direkt über die OSM-API abgerufen und exakt mit der beigefügten Referenzdatei abgeglichen. Diese Punkte sind keine acht freigegebenen Queststationen. Alle acht Stationswerte `point` bleiben `null`, die Wanderroute ein leeres Array und `fieldReady=false`. Strecke und Dauer werden nicht als gemessen ausgegeben.
 
-Die Kartenmitte `51.869, 8.917` dient ausschließlich der regionalen Orientierung in der interaktiven Grundkarte. Sie ist weder Startpunkt noch Station oder geprüfte Wegeinformation. Es gibt keine Polyline durch Stationszentren. Eine spätere Wanderlinie muss eine echte, quellenbelegte Weggeometrie enthalten.
+## Erfolgreich abgerufene Orientierungspunkte
 
-## Rechercheversuch vom 16.10.2026
+Maschinenlesbare Herkunft: `content/routes/externsteine-reference-points.json`. Jeder API-Abruf lieferte HTTP 200 mit genau diesen Koordinaten:
 
-| Quelle                                                                   | Zweck                                                                 | Tatsächlicher Prüfstatus                                                 |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| https://www.externsteine-info.de/                                        | Betreiberinformationen, Zugänglichkeit, Öffnungen, Wege-/Schutzregeln | HTTP-Proxy verweigert Zugriff (403); Inhalt nicht gelesen oder bestätigt |
-| https://www.openstreetmap.org/api/0.6/map?bbox=8.911,51.862,8.923,51.873 | Öffentliche Weg- und Ortsobjekte im Gebiet                            | HTTP-Proxy verweigert Zugriff (403); keine Geodaten übernommen           |
-| https://api.openstreetmap.org/ und https://overpass-api.de/              | Vorgesehene OSM-Recherche nach Netzwerkfreigabe                       | Nicht als erfolgreich abgerufen ausgegeben                               |
+| OSM-Objekt                                                         | Bezeichnung                          | Breitengrad | Längengrad |
+| ------------------------------------------------------------------ | ------------------------------------ | ----------- | ---------- |
+| [node/10544136713](https://www.openstreetmap.org/node/10544136713) | Wegweiser „Infozentrum Externsteine“ | 51.8683056  | 8.9236213  |
+| [node/5909732105](https://www.openstreetmap.org/node/5909732105)   | Knickenhagen IV                      | 51.8650817  | 8.922974   |
+| [node/5483282172](https://www.openstreetmap.org/node/5483282172)   | Externsteine Naturerlebnispfade      | 51.86788    | 8.9157458  |
+| [node/5483282173](https://www.openstreetmap.org/node/5483282173)   | Externsteine Südseite                | 51.8684932  | 8.9167329  |
+| [node/7122025636](https://www.openstreetmap.org/node/7122025636)   | Externsteine                         | 51.8689687  | 8.9178219  |
 
-Die benötigten Hostnamen wurden im Cloud-Konfigurationsentwurf ergänzt. Speichern des Entwurfs aktiviert sie nicht automatisch auf der laufenden Maschine. Es gibt keine erfolgreiche Online-Quellenprüfung, keine Aussage über aktuelle Sperrungen und keine Begehung.
+Prüfstatus: `desk_checked` = OSM-Objekt/Name/Koordinate online gelesen. Das bestätigt weder die aktuelle Zugänglichkeit noch eine sichere Spielfläche. Besonders der erste Punkt bezeichnet einen **Wegweiser**, nicht nachweislich das Gebäude des Infozentrums. Die App kennzeichnet die Punkte als Orientierung, zeichnet keine Verbindungslinien und nutzt sie nicht als GPS-Auslöser.
 
-## Noch vor Ort zu prüfen
+Die Kartenmitte `51.869, 8.917` ist ausschließlich eine regionale Ansicht. Eine spätere Wanderlinie muss eine belegte Weggeometrie enthalten; Stationszentren dürfen nicht durch Luftlinien verbunden werden.
 
-Acht geeignete Haltepunkte entlang **eines zusammenhängenden freigegebenen Wegs** auswählen. Jeden Punkt mit präziser Herkunft (OSM-Typ/ID/Version oder offizieller Geodatensatz), Koordinate, Zugangsrecht, Datum und Unsicherheiten dokumentieren. Wege nicht durch Luftlinien ersetzen; Treppen, Tore, Steigungen, sensible Naturschutzflächen und temporäre Sperrungen berücksichtigen. Keine Felsspitzen, Kletterstellen, Gegenstände oder abseits gelegenen Verstecke verwenden. Spielaufgaben bleiben digital und erfordern weder Sammeln noch Verändern der Natur.
+## Weitere Quellen und offene Prüfung
 
-Eine Begehung muss GPS-Empfang, Radius/Genauigkeit, sichere Aufenthaltsfläche ohne Wegblockade, Start-/Rückweg und reale Dauer bestätigen. Auch recherchierte Koordinaten sind vor dieser Begehung höchstens `desk_checked`; `field_checked` setzt diese tatsächliche Prüfung voraus. Aktuelle Betreiberanweisungen vor Ort haben Vorrang.
+Die beigefügte `wyldo_externsteine_mission_seed.json` ist unverändert unter `content/references/user-quest-seed.json` archiviert. Ihr Text enthält fünf Alva-/Sternenkompass-Stationen und widerspricht damit der ausdrücklich beauftragten Wyldo-Schatzgeschichte. Sie wird als Orts-/Quellenreferenz genutzt, nicht als spielbarer Inhalt importiert. Die App behält acht Stationen, Runa, vier Siegel und das Kristallfinale.
 
-## Karten
+Die Datei nennt die [Kinder-Erlebnis-Route Knickhagen OH6](https://www.teutoburgerwald.de/natur/in-der-natur/tour/kinder-erlebnis-route-knickhagen-an-den-externsteinen-oh-6) samt GPX-Export. Offizielle Seite und GPX konnten wegen HTTP-Proxy 403 **nicht gelesen** werden. Die dort im Anhang behaupteten 2,55 km/85 Minuten wurden nicht bestätigt oder übernommen. Auch [Betreiberinformationen](https://www.externsteine-info.de/) waren in dieser Umgebung nicht lesbar. Ein Overpass-Abruf lieferte 406; daraus wurde keine Weggeometrie konstruiert.
 
-Native Karten stammen aus Apple Maps/Google Maps und zeigen deren Attribution. Web: Leaflet mit öffentlichen OSM-Rasterkacheln und sichtbarer OSM-Attribution. Die OSM-Kacheln benötigen Internet und werden **nicht** für Offline-Verwendung heruntergeladen. Bei Netzwerkfehlern erklärt die App die Einschränkung; heruntergeladene Texte und GPS-Regeln bleiben unabhängig. Es wird keine Navigations- oder Routingsicherheit behauptet.
+## Vor Veröffentlichung und vor Ort
+
+Acht sichere Aufenthaltsorte an einem zusammenhängenden, freigegebenen Weg auswählen. Für jeden Punkt Objekt/ID/Version oder amtliche Herkunft, Zugangsrecht, Datum und Unsicherheiten dokumentieren. Tatsächliche Weggeometrie, Sperrungen, Treppen, Tore, Steigungen und Schutzbereiche prüfen. Eine Begehung muss GPS-Empfang, Radius/Genauigkeit, Aufenthaltsfläche, Start-/Rückweg und Dauer bestätigen. Erst danach ist `field_checked` angemessen. Keine Felsspitzen, Kletterstellen, Gegenstände oder Verstecke abseits der Wege. Alle Siegel und Belohnungen sind digital.
+
+## Karten und Betrieb
+
+Web und iOS/Android verwenden Leaflet 1.9.4 mit OpenStreetMap-Rasterkacheln. Auf dem Smartphone liegt Leaflet samt CSS im Bundle und wird in `react-native-webview` angezeigt; es gibt keine Laufzeitabhängigkeit von einem JavaScript-CDN und keinen Google-Maps-Key. Die vorherige native Maps-Abhängigkeit wurde entfernt. Der Schritt behebt die Schlüsselplicht eigener Android-Builds und macht die Darstellung plattformübergreifend gleich.
+
+Der echte Kachelabruf wurde im Cloud-Chromium über den vorgesehenen HTTPS-Proxy geprüft (sechs Antworten HTTP 200), zusätzlich sind Fehler/Wiederholung und der native HTML-/Daten-Bridge-Code browsergetestet. Ein nativer Smartphone-Start ist noch offen. Attribution bleibt in der Karte sichtbar. Die öffentliche OSM-Infrastruktur unterliegt der [Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/) und besitzt keine zugesicherte Verfügbarkeit; für größeren Betrieb einen geeigneten Anbieter prüfen. Es werden keine Kartenkacheln für Offline-Nutzung vorgeladen. Karten benötigen Internet; heruntergeladene Texte und GPS-Regeln bleiben unabhängig davon verfügbar.

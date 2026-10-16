@@ -1,3 +1,6 @@
+import { useCallback } from "react";
+import { useFocusEffect } from "expo-router";
+import { setStatusBarStyle } from "expo-status-bar";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { type ComponentProps, type PropsWithChildren } from "react";
 import {
@@ -29,18 +32,36 @@ export function Icon({
 export function Screen({
   children,
   withHeader = false,
-}: PropsWithChildren<{ withHeader?: boolean }>) {
+  fullBleed = false,
+  bottomInset = false,
+}: PropsWithChildren<{
+  withHeader?: boolean;
+  fullBleed?: boolean;
+  bottomInset?: boolean;
+}>) {
+  useFocusEffect(
+    useCallback(() => {
+      setStatusBarStyle(fullBleed ? "light" : "dark");
+    }, [fullBleed]),
+  );
   return (
     <SafeAreaView
-      style={layout.screen}
+      style={[layout.screen, fullBleed && { backgroundColor: "#263C26" }]}
       edges={
-        withHeader ? ["left", "right", "bottom"] : ["top", "left", "right"]
+        withHeader
+          ? ["left", "right", "bottom"]
+          : bottomInset
+            ? ["top", "left", "right", "bottom"]
+            : ["top", "left", "right"]
       }
     >
       <ScrollView
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-        contentContainerStyle={layout.content}
+        contentContainerStyle={[
+          layout.content,
+          fullBleed && { padding: 0, gap: 0, paddingBottom: 0 },
+        ]}
       >
         {children}
       </ScrollView>
@@ -53,7 +74,7 @@ export function Brand() {
     <View style={[layout.row, { justifyContent: "space-between" }]}>
       <View style={layout.row} accessibilityLabel="Wyldo">
         <View style={styles.logo}>
-          <Icon name="trail-sign-outline" color={colors.background} size={27} />
+          <Icon name="leaf" color={colors.forest} size={27} />
         </View>
         <Text style={styles.brand}>Wyldo</Text>
       </View>
@@ -131,7 +152,7 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     borderRadius: 15,
-    backgroundColor: colors.forest,
+    backgroundColor: colors.moss,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -153,7 +174,7 @@ const styles = StyleSheet.create({
   button: {
     minHeight: 52,
     borderRadius: 15,
-    backgroundColor: colors.orange,
+    backgroundColor: colors.forest,
     paddingHorizontal: 20,
     paddingVertical: 14,
     flexDirection: "row",
@@ -161,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
-  secondary: { backgroundColor: colors.moss },
+  secondary: { backgroundColor: colors.sand },
   buttonText: {
     color: colors.surface,
     fontSize: 15,

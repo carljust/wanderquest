@@ -30,6 +30,8 @@ export function friendlyError(error: unknown) {
     typeof error.message === "string"
       ? error.message
       : "Etwas ist schiefgegangen. Bitte erneut versuchen.";
+  if (/provider.*(not enabled|disabled)|unsupported provider/i.test(message))
+    return "Google-Anmeldung ist im Supabase-Projekt noch nicht aktiviert.";
   if (/invalid login credentials/i.test(message))
     return "E-Mail oder Passwort stimmen nicht.";
   if (/email not confirmed/i.test(message))

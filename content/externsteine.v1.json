@@ -19,10 +19,10 @@
   "approval": "pending_source_review",
   "fieldReady": false,
   "route": [],
-  "routeStatus": "Ungeprüfter Entwurf: Koordinaten, Wegverbindungen und örtliche Zugänglichkeit sind noch zu recherchieren und vor Ort zu prüfen.",
+  "routeStatus": "Fünf reale OSM-Orientierungspunkte am 16.10.2026 abgeglichen. Acht Questorte, zusammenhängende Weggeometrie und Begehung sind noch offen. Vor-Ort-Spiel ist noch nicht freigegeben.",
   "stations": [
     {
-      "title": "Wyldos Fund",
+      "title": "Die geheimnisvolle Schatzkarte",
       "place": "Vorschlag: am Informationszentrum",
       "intro": "Wyldo zieht vorsichtig eine zerknitterte Schatzkarte aus seinem Rucksack. „Die habe ich zwischen alten Reiseaufzeichnungen entdeckt! Vier Steinsiegel sollen den Weg zum verlorenen Schatz der Externsteine öffnen. Kommst du mit?“ Auf der Rückseite steht: „Was Wege zeigt, ohne selbst zu gehen, ist unser Anfang.“",
       "success": "„Eine Karte!“, ruft Wyldo. „Dann haben wir unseren Anfang. Wir suchen die Siegel des Mutes, der Neugier, des Zuhörens und der Gemeinschaft.“",
@@ -52,12 +52,12 @@
       }
     },
     {
-      "title": "Das Siegel des Mutes",
+      "title": "Das erste Steinsiegel",
       "place": "Vorschlag: Weg mit Blick auf die Felsen",
       "intro": "Im Abenteuer erscheinen drei Zeichen auf einem Felsen der Schatzkarte: Kreis, Dreieck, Kreis, Dreieck, Kreis. Wyldo bleibt auf dem Weg stehen. „Mut heißt nicht, überall hinzuklettern. Mut heißt auch, den sicheren Weg zu wählen.“",
       "success": "Das Dreieck leuchtet auf. Das erste Steinsiegel erscheint in eurem digitalen Beutel: Mut. „Wir kommen auch ohne riskante Abkürzung voran“, sagt Wyldo.",
       "failure": "Das Zeichen bleibt dunkel. „Schau auf die ganze Reihe und suche einen Wechsel“, schlägt Wyldo vor.",
-      "bridge": "Ein Ruf aus den Bäumen unterbricht euch. Jemand scheint eure Karte zu kennen.",
+      "bridge": "Zwischen den gezeichneten Bäumen und Felsen auf eurer Karte versteckt sich eine neue Verbindung. Ihr könnt sie gemeinsam entschlüsseln.",
       "id": "e3000000-0000-4000-8000-000000000002",
       "order": 2,
       "point": null,
@@ -96,12 +96,12 @@
       }
     },
     {
-      "title": "Runa kennt den Wald",
+      "title": "Die Zeichen der Natur",
       "place": "Vorschlag: Abschnitt am Waldrand",
-      "intro": "In der erfundenen Geschichte landet Runa, der Steinkauz, auf einem Ast. „Eine alte Karte? Dann seid neugierig, aber schaut genau hin“, sagt sie. „Mein Name verrät euch schon etwas über mich.“ Wyldo schlägt sein kleines Naturheft auf: Steinkäuze gehören zu den Eulen.",
-      "success": "Runa nickt. „Genau. Die sprechende Runa ist erfunden; Steinkäuze sind echte Eulen.“ Das zweite Steinsiegel, Neugier, glimmt auf eurer Karte.",
-      "failure": "„Das klingt nach unserer Abenteuergeschichte“, sagt Runa. „Welche Antwort beschreibt ein echtes Tier?“",
-      "bridge": "Runa bittet euch, am nächsten Abschnitt erst still zuzuhören, bevor ihr weiterzieht.",
+      "intro": "Wyldo vergleicht die kleinen Zeichnungen auf der Schatzkarte. Unter einem Baum steht Holz. Unter einem Felsen fehlt das Wort. „Die Karte beschreibt, woraus die Dinge bestehen. Welches Wort gehört zum Felsen?“ Ihr löst das Rätsel auf dem Bildschirm; Pflanzen und Felsen bleiben unberührt.",
+      "success": "„Stein!“, sagt Wyldo. „Du hast die Verbindung erkannt.“ Das Siegel der Neugier leuchtet auf. Zwischen den Bäumen hört ihr einen Ruf: Runa, der Steinkauz, möchte euch eine Botschaft mitgeben.",
+      "failure": "Wyldo zeigt noch einmal auf die beiden Paare. „Der Baum liefert Holz. Woraus besteht ein Felsen?“",
+      "bridge": "Runa spricht langsam und deutlich. Ihre Botschaft kannst du hören oder vollständig lesen.",
       "id": "e3000000-0000-4000-8000-000000000003",
       "order": 3,
       "point": null,
@@ -111,36 +111,22 @@
       "imageAsset": "station-3",
       "dialogues": [
         {
-          "speaker": "Runa",
-          "text": "In der erfundenen Geschichte landet Runa, der Steinkauz, auf einem Ast. „Eine alte Karte? Dann seid neugierig, aber schaut genau hin“, sagt sie. „Mein Name verrät euch schon etwas über mich.“ Wyldo schlägt sein kleines Naturheft auf: Steinkäuze gehören zu den Eulen.",
-          "mood": "talk"
+          "speaker": "Wyldo",
+          "text": "Wyldo vergleicht die kleinen Zeichnungen auf der Schatzkarte. Unter einem Baum steht Holz. Unter einem Felsen fehlt das Wort. „Die Karte beschreibt, woraus die Dinge bestehen. Welches Wort gehört zum Felsen?“ Ihr löst das Rätsel auf dem Bildschirm; Pflanzen und Felsen bleiben unberührt.",
+          "mood": "think"
         }
       ],
       "puzzle": {
-        "kind": "choice",
-        "prompt": "Welche Aussage ist eine überprüfbare Naturinformation und kein Zauber aus der Geschichte?",
+        "kind": "text",
+        "prompt": "Ergänze das Paar: Baum → Holz, Fels → …",
         "hints": [
-          "Suche die Information aus Wyldos Naturheft.",
-          "Die beiden Aussagen über Verwandlung und Schatzkarten gehören zur Fantasie."
-        ],
-        "options": [
-          {
-            "id": "eule",
-            "label": "Der Steinkauz gehört zu den Eulen."
-          },
-          {
-            "id": "stein",
-            "label": "Steinkäuze verwandeln sich bei Vollmond in Stein."
-          },
-          {
-            "id": "karte",
-            "label": "Alle Steinkäuze bewachen Schatzkarten."
-          }
+          "Gesucht ist das Material eines Felsens.",
+          "Das gesuchte Wort hat fünf Buchstaben und lautet Stein."
         ]
       }
     },
     {
-      "title": "Runas leise Botschaft",
+      "title": "Das Geheimnis des Wassers",
       "place": "Vorschlag: ruhiger Abschnitt am Weg",
       "intro": "„Für die nächste Botschaft braucht ihr weder Kopfhörer noch Ton“, erklärt Runa. „Ihr könnt sie hören oder vollständig lesen. Achtet auf die Reihenfolge.“ Wyldo hält seinen Kompass still.",
       "success": "„Wasser“, wiederholt Wyldo. Runa neigt den Kopf. Das dritte Steinsiegel heißt Zuhören. Auch wer die Textalternative gelesen hat, erhält dasselbe Siegel.",
@@ -171,9 +157,9 @@
       }
     },
     {
-      "title": "Gemeinsam weiter",
+      "title": "Runa, der Steinkauz",
       "place": "Vorschlag: breiter Wegabschnitt",
-      "intro": "Wyldo legt vier Wortkarten auf dem Bildschirm aus. „Den Schatz finden wir nur zusammen. Setzt unseren Satz in die richtige Reihenfolge.“ Wer allein unterwegs ist, kann sich dabei mit Wyldo und Runa beraten; eine zweite Person ist nicht erforderlich.",
+      "intro": "Runa, der Steinkauz, landet in der erfundenen Geschichte neben Wyldos Karte. „Ihr habt gut zugehört. Nun fehlt noch das Siegel der Gemeinschaft.“ Wyldo legt vier Wortkarten aus. „Wir schaffen es zusammen – auch wenn du allein unterwegs bist, gehören Runa und ich zu deinem Team.“",
       "success": "„Gemeinsam kommen wir weiter!“ Der Satz bringt das vierte Siegel zum Leuchten: Gemeinschaft. Wyldo schaut zu Runa. „Jetzt fehlt uns nur noch der Zugang zum Kristall.“",
       "failure": "Die Wörter ergeben noch nicht den Satz auf der Karte. „Fangt mit Gemeinsam an und probiert es noch einmal“, sagt Wyldo.",
       "bridge": "Vier Siegel liegen vor euch. Ihre Reihenfolge wird zum Schlüssel für das nächste Rätsel.",
@@ -186,8 +172,8 @@
       "imageAsset": "station-5",
       "dialogues": [
         {
-          "speaker": "Wyldo",
-          "text": "Wyldo legt vier Wortkarten auf dem Bildschirm aus. „Den Schatz finden wir nur zusammen. Setzt unseren Satz in die richtige Reihenfolge.“ Wer allein unterwegs ist, kann sich dabei mit Wyldo und Runa beraten; eine zweite Person ist nicht erforderlich.",
+          "speaker": "Runa",
+          "text": "Runa, der Steinkauz, landet in der erfundenen Geschichte neben Wyldos Karte. „Ihr habt gut zugehört. Nun fehlt noch das Siegel der Gemeinschaft.“ Wyldo legt vier Wortkarten aus. „Wir schaffen es zusammen – auch wenn du allein unterwegs bist, gehören Runa und ich zu deinem Team.“",
           "mood": "talk"
         }
       ],
@@ -219,7 +205,7 @@
       }
     },
     {
-      "title": "Der Schlüssel aus vier Siegeln",
+      "title": "Die verschwundenen Spuren",
       "place": "Vorschlag: Weg in Richtung Ausgangspunkt",
       "intro": "Die Schatzkarte zeigt vier Mulden. Darunter steht: „Nicht die Größe zählt, sondern die Reihenfolge eurer Entdeckungen.“ Auf der Karte trägt Mut die Zahl 2, Neugier die 4, Zuhören die 1 und Gemeinschaft die 3. Das sind erfundene Zeichen des Spiels, keine Inschriften an den Externsteinen.",
       "success": "Mit 2413 öffnet sich auf dem Bildschirm eine steinerne Tür. Niemand muss eine echte Tür suchen oder einen abgesperrten Bereich betreten.",
@@ -249,7 +235,7 @@
       }
     },
     {
-      "title": "Was wir bewahren",
+      "title": "Das letzte Geheimnis der Felsen",
       "place": "Vorschlag: Rückweg auf ausgeschildertem Weg",
       "intro": "Runa zeigt auf den Wald und die Felsen. „Unser Abenteuer ist erfunden. Dieser Ort und die Menschen, Tiere und Pflanzen hier sind echt. Ein guter Schatzsucher hinterlässt keine Spuren.“ Wyldo faltet die Karte sorgfältig zusammen.",
       "success": "„Erinnerungen und unseren eigenen Abfall“, bestätigt Wyldo. „Der Ort bleibt so, wie wir ihn vorfinden möchten.“ Runa öffnet ihre Flügel: Der Kristall wartet.",
@@ -293,7 +279,7 @@
       }
     },
     {
-      "title": "Der verlorene Schatz",
+      "title": "Die verborgene Schatztruhe",
       "place": "Vorschlag: Abschluss nahe dem Ausgangspunkt",
       "intro": "Nur auf eurem Bildschirm öffnen die vier Steinsiegel eine kleine Kammer. In ihrer Mitte schwebt ein geheimnisvoller Kristall. Wyldo staunt. „Die Karte hat uns nicht zu Gold geführt. Der Kristall trägt all die Momente, in denen wir mutig, neugierig und füreinander da waren.“ Runa fragt: „Welche drei Dinge machen diesen Schatz so wertvoll?“",
       "success": "Der Kristall erstrahlt. „Abenteuer!“, rufen Wyldo und Runa. Ihr habt alle vier Siegel zusammengebracht und den verlorenen Schatz gefunden.",
@@ -328,55 +314,71 @@
       "id": "station-1",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 1 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
       "id": "station-2",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 2 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
       "id": "station-3",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 3 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
       "id": "station-4",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 4 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
       "id": "station-5",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 5 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
       "id": "station-6",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 6 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
       "id": "station-7",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 7 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
       "id": "station-8",
       "kind": "image",
       "url": null,
-      "description": "Freigegebenes Quest-Bild für Station 8 fehlt"
+      "bundled": "scenes",
+      "description": "Zum freigegebenen Mockup ergänzte Abenteuerillustration; kein Ortsfoto"
     },
     {
-      "id": "wyldo-rig",
-      "kind": "animation",
+      "id": "wyldo-poses",
+      "kind": "image",
       "url": null,
-      "description": "Freigegebener Fuchs mit grünem Schal, Rucksack und Kompass; Rig fehlt"
+      "bundled": "fox",
+      "description": "Vier Gesamtposen nach der bereitgestellten Wyldo-Vorlage; kein Character-Rig"
+    },
+    {
+      "id": "stone-seals",
+      "kind": "image",
+      "url": null,
+      "description": "Vier digitale Steinsiegel für Mut, Neugier, Zuhören und Gemeinschaft.",
+      "bundled": "seals"
     }
   ],
   "badge": {

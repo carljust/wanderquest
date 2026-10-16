@@ -1,12 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import type { Quest, Fix } from "@/domain/quest";
-import { Notice } from "@/components/ui";
+import { Button, Notice } from "@/components/ui";
 import "leaflet/dist/leaflet.css";
 import "./quest-map.css";
+import { orientationPoints } from "./references";
 
 // Native resolves quest-map.native. No tile download or speculative route.
-export function QuestMap({ quest, fix }: { quest: Quest; fix?: Fix }) {
+export function QuestMap(props: { quest: Quest | null; fix?: Fix }) {
+  const [attempt, setAttempt] = useState(0);
+  return (
+    <View style={{ gap: 12 }}>
+      <WebMap key={attempt} {...props} />
+      <Button
+        label="Karte neu laden"
+        secondary
+        icon="refresh-outline"
+        onPress={() => setAttempt((value) => value + 1)}
+      />
+    </View>
+  );
+}
+function WebMap({ quest, fix }: { quest: Quest | null; fix?: Fix }) {
   const container = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<import("leaflet").Map | null>(null);
   const [error, setError] = useState("");
@@ -47,7 +62,20 @@ export function QuestMap({ quest, fix }: { quest: Quest; fix?: Fix }) {
           if (alive) setLoading(false);
         });
         tiles.addTo(instance);
-        for (const station of quest.stations) {
+        for (const point of orientationPoints) {
+          const label = document.createElement("span");
+          label.textContent =
+            point.name + " · OSM-Orientierungspunkt, keine Queststation";
+          L.circleMarker([point.point.latitude, point.point.longitude], {
+            radius: 7,
+            color: "#456341",
+            fillColor: "#eeeadd",
+            fillOpacity: 1,
+          })
+            .addTo(instance)
+            .bindTooltip(label);
+        }
+        for (const station of quest?.stations ?? []) {
           if (station.point && station.coordinateStatus !== "unverified") {
             const label = document.createElement("span");
             label.textContent = `${station.order}. ${station.title}`;
@@ -59,7 +87,7 @@ export function QuestMap({ quest, fix }: { quest: Quest; fix?: Fix }) {
               .bindTooltip(label);
           }
         }
-        if (quest.route.length > 1)
+        if (quest && quest.route.length > 1)
           L.polyline(
             quest.route.map((p) => [p.latitude, p.longitude]),
             { color: "#CB542C", weight: 4 },

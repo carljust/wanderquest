@@ -17,5 +17,5 @@ export const companionAssets: {
 } = {
   portrait: null,
   rig: null,
-  supportsWave: false,
+  supportsWave: true,
 };

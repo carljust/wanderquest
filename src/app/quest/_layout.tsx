@@ -16,9 +16,22 @@ export default function QuestLayout() {
         headerBackTitle: "Zurück",
       }}
     >
-      <Stack.Screen name="details" options={{ title: "Dein Abenteuer" }} />
-      <Stack.Screen name="play" options={{ title: "Auf Schatzsuche" }} />
-      <Stack.Screen name="finish" options={{ title: "Dein Schatz" }} />
+      <Stack.Screen
+        name="details"
+        options={{ title: "Dein Abenteuer", headerShown: false }}
+      />
+      <Stack.Screen
+        name="play"
+        options={{ title: "Auf Schatzsuche", headerShown: false }}
+      />
+      <Stack.Screen
+        name="finish"
+        options={{ title: "Dein Schatz", headerShown: false }}
+      />
+      <Stack.Screen
+        name="progress"
+        options={{ title: "Dein Fortschritt", headerShown: false }}
+      />
     </Stack>
   );
 }

@@ -1,18 +1,25 @@
-# Wyldo-Charaktervertrag
+# Wyldo: Figur, Bilder und Animationsumfang
 
-Im Repository waren ausschließlich ein generisches Launcher-Icon und eine alte Landschaftskomponente vorhanden. Kein freigegebener Fuchs mit grünem Schal, Rucksack und Kompass, kein Character-Rig, keine Questbilder, kein Rive-/Lottie-Asset oder Ton lag vor. Die alte generische Landschaft wurde entfernt. Es wurde kein Ersatzmaskottchen erzeugt.
+Die Nutzerreferenz zeigt Wyldo mit grünem Schal, Rucksack und Kompass in vier Posen. Daraus wurde ein transparentes Posen-Atlas für die App aufbereitet (`assets/design/wyldo-poses.png`). Die ergänzten Szenen zeigen Externsteine, Waldbach, Runa und Kristallschatz. Vier Steinsiegel ergänzen das freigegebene Mockup. Ein Wyldo-Porträt ersetzt das generische Launcher-Icon. Herkunft und Grenzen stehen in `assets/design/manifest.json`.
 
-`WyldoCompanion` bekommt nur Darstellungszustand, Wortimpuls und reduzierte Bewegung. Dialog-/Questregeln liegen getrennt davon. Zustände: idle, talk, think, surprise, celebrate und wave; eine Begrüßung ist derzeit **nicht grafisch unterstützt** (`supportsWave=false`). Ein zukünftiger Rive-Renderer kann denselben Zustandsvertrag übernehmen.
+Die ergänzten Landschaftsbilder sind **generierte Abenteuerillustrationen**, keine dokumentarischen Ortsfotos oder Belege einer Route. Die Posen sind aus der gelieferten Charakterreferenz abgeleitet; sie ersetzen kein Original-Character-Rig. Die Inline-Vorlagen liegen im Repository nicht als unveränderte Quelldateien vor. Für eine pixelgenaue endgültige Auslieferung sollten die freigegebenen Originalexports separat archiviert werden.
 
-Aktuell erscheint ein ausdrücklich benannter neutraler Platzhalter. Damit gibt es **keine fertig animierte Fuchsfigur**, kein sichtbares Blinzeln oder Mundspiel am genehmigten Fuchs und keine überprüfte Endqualität eines Rigs. Die Implementierung bietet einen begrenzten Renderer für passende Ebenen, aber dessen Grafikqualität kann ohne Ebenen nicht geprüft werden.
+## Tatsächlich implementiert
 
-## Benötigte Assets
+`WyldoCompanion` trennt Darstellung von Quest, Dialog und Audio. Der Zustandsvertrag bleibt `idle`, `talk`, `think`, `surprise`, `celebrate`, `wave`. Zustände wählen eine passende der vier Ganzbildposen und begrenzte Gesamtbewegungen:
 
-1. Freigegebener transparenter Portrait-PNG als kurzfristige statische Figur. Dieser erhält ausschließlich geringe Gesamtbewegung; darauf werden keine fremden Augen oder Münder gezeichnet.
-2. Für Blinzeln/Mundbewegungen gleich große transparente Ebenen im identischen Koordinatensystem: Körper ohne zweiten Kopf, Kopf ohne Augen/Mund, offene und geschlossene Augen, ruhender und sprechender Mund. Keine Gesichtszüge dürfen auf mehreren Ebenen enthalten sein. Grünem Schal, Rucksack und Kompass müssen Form und Position konsistent bleiben. Alternativ ein vollständig geriggtes Rive-Asset mit dokumentierten State-Machine-Eingängen; Rive-Abhängigkeit und Development Build erst dann einrichten.
-3. Für echtes Winken eine passende Arm-/Pfotenanimation. Diese ist nicht durch Gesamtbilddrehen zu ersetzen.
-4. Acht genehmigte Questillustrationen und gegebenenfalls deutsche Dialogaufnahmen. Zuordnung über den Inhalts-/Storage-Assetkatalog.
+- Idle: ruhige Standpose mit geringer Auf-/Abbewegung.
+- Talk / Surprise: aufmerksam-fröhliche Pose; keine behauptete Mundsynchronisation.
+- Think: Standpose mit leichter Gesamtneigung.
+- Celebrate: Jubelpose mit kleiner Auf-/Abbewegung.
+- Wave: vorhandene Begrüßungspose mit erhobener Pfote; kein separat animierter Arm.
 
-Portrait/Ebenen in `src/features/companion/assets.ts` statisch referenzieren. Keine Webgrafiken oder fremden Tiere als finale Figur einsetzen. Mundzustände werden bei TTS aus verfügbaren **Wortgrenzen** vereinfacht angestoßen. Das ist weder gemessene Audio-Amplitude noch Visem-/Phonemsynchronisation; für Audiodateien liegen keine Zeitmarken oder Mundimpulse vor. Aufnahmen lassen sich abspielen, erhalten aber keine behauptete präzise Lippensynchronisation.
+Es gibt **keine unabhängig beweglichen Gesichts-/Körperteile**, kein echtes Blinzeln, keinen animierten Mund und keine Lippensynchronisation im aktuellen Posen-Renderer. Keine fremden Augen/Münder werden auf die PNGs gezeichnet. Die Reduzierung von Bewegung berücksichtigt sowohl App- als auch Systemeinstellung.
 
-Deutsche TTS benötigt eine installierte Gerätestimme; deren Offline-Verfügbarkeit und iOS-Stummschalter sind geräteabhängig. Text ist immer vollständig vorhanden. Stumm, Überspringen, Wiederholen und Verlassen stoppen die Ausgabe. Bewegung wird durch App-Einstellung **oder** Systemeinstellung reduziert. Die tatsächliche visuelle Rig-Abnahme und Stimme müssen auf iOS/Android nachgeholt werden.
+Der optionale Ebenenrenderer und die `mouthPulse`-Schnittstelle sind vorbereitet, aber ohne geeignete Grafik nicht aktiviert. Deutsche Geräte-TTS liefert gegebenenfalls Wortgrenzen als vereinfachte Steuerimpulse. Das ist weder gemessene Audio-Amplitude noch zeitgesteuerte Phonem-/Visem-Synchronisation. Der Renderer kann später durch Rive ersetzt werden; eine Rive-Integration wurde nicht vorgetäuscht.
+
+## Noch benötigtes Rig
+
+Entweder ein hochwertiges Rive-Asset mit dokumentierten State-Machine-Eingängen oder transparente, deckungsgleiche Ebenen im gleichen Koordinatensystem: Körper ohne zweiten Kopf, Kopf ohne Augen/Mund, offene/geschlossene Augen sowie Ruhe-/Sprechmund. Pfote/Arm brauchen für echtes Winken eine eigene Ebene und einen passenden Drehpunkt. Gesichtszüge dürfen nicht doppelt in den Ebenen liegen. Assetvertrag: `src/features/companion/assets.ts`.
+
+Deutsche Sprachausgabe benötigt eine installierte Gerätestimme; Offline-Verfügbarkeit und Stummschalterverhalten sind geräteabhängig. Untertitel bleiben vollständig lesbar. Stumm, Überspringen, Wiederholen und Verlassen stoppen die Ausgabe. Sprachaufnahmen sind derzeit nicht beigefügt. Die tatsächliche native Stimme und die spätere Rig-Qualität müssen auf iOS/Android geprüft werden.

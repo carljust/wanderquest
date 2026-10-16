@@ -1,3 +1,4 @@
+import { PracticeEntry } from "@/components/practice-entry";
 import { router } from "expo-router";
 import { Text, View } from "react-native";
 import { Button, LoadingState, Screen } from "@/components/ui";
@@ -11,6 +12,7 @@ export default function Adventures() {
       <Text style={layout.eyebrow}>DEINE GESCHICHTEN DRAUSSEN</Text>
       <Text style={layout.title}>Abenteuer</Text>
       <QuestStatus />
+      <PracticeEntry />
       {q.loading ? (
         <LoadingState />
       ) : q.quest ? (

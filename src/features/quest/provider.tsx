@@ -405,9 +405,9 @@ function QuestSessionProvider({
                 assetUris[asset.id] = await downloadAsset(asset.url, asset.id);
             await persist({ ...state.current, downloaded: true, assetUris });
             setNotice(
-              quest.assets.some((a) => !a.url)
-                ? "Vorhandene Texte und Medien gespeichert. Freigegebene Grafiken/Audiodateien fehlen noch. Karten werden nicht heruntergeladen."
-                : "Quest-Inhalte gespeichert. Karten benötigen weiterhin eine Verbindung.",
+              quest.assets.some((a) => !a.url && !a.bundled)
+                ? "Vorhandene Questtexte und Medien gespeichert. Einige referenzierte Dateien fehlen noch; Karten sind nicht enthalten."
+                : "Questtexte und Bilder sind offline verfügbar. Karten benötigen weiterhin eine Verbindung.",
             );
           }),
         recover: () =>

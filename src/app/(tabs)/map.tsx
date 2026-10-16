@@ -14,18 +14,21 @@ export default function MapScreen() {
       <Text style={layout.eyebrow}>DEIN WEG INS ABENTEUER</Text>
       <Text style={layout.title}>Draußen unterwegs.</Text>
       <QuestStatus />
+      <QuestMap quest={q.quest} fix={gps.fix} />
+      <Notice>
+        Die hellen Punkte zeigen fünf online abgeglichene OSM-Orientierungsorte.
+        Sie sind keine freigegebenen Queststationen.
+      </Notice>
       {q.quest ? (
         <>
-          <QuestMap quest={q.quest} fix={gps.fix} />
           <Notice warning>
             {q.quest.routeStatus} Die Karte dient bis zur Freigabe nur der
             Orientierung. Es werden keine ungeprüften Stationspunkte oder
             Luftlinien als Wanderweg eingezeichnet.
           </Notice>
           <Text style={layout.body}>
-            Karte: online erforderlich. Auf dem Smartphone gelten die
-            Bedingungen von Apple Maps bzw. Google Maps; im Browser ©
-            OpenStreetMap-Mitwirkende.
+            Karte: online erforderlich. Kartendaten © OpenStreetMap-Mitwirkende.
+            Es werden keine Kartenkacheln für Offline-Nutzung heruntergeladen.
           </Text>
         </>
       ) : (

@@ -1,15 +1,15 @@
 import { StyleSheet } from "react-native";
 
 export const colors = {
-  background: "#F5F2EA",
-  surface: "#FFFFFF",
-  forest: "#183D32",
-  pine: "#2F6250",
-  moss: "#DBE8D7",
+  background: "#F2EEE3",
+  surface: "#FAF8F1",
+  forest: "#45613F",
+  pine: "#486C47",
+  moss: "#DDE7D3",
   muted: "#68756B",
   line: "#E1E5DB",
   orange: "#CB542C",
-  sand: "#F1E5D1",
+  sand: "#EEEADD",
   ink: "#1C3027",
   danger: "#A33327",
 };

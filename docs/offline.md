@@ -1,6 +1,6 @@
 # Offline und Wiederaufnahme
 
-Der Download speichert den unveränderlichen Quest-Snapshot sowie alle tatsächlich referenzierten Medien mit erreichbarer URL. Native Dateien liegen im Dokumentverzeichnis; Webmedien im Cache API-Speicher, aufgelöste Blob-URLs werden nach Verwendung freigegeben. Fehlende Grafiken/Audios werden nicht als heruntergeladen ausgegeben. Der jetzige Entwurf enthält Texte, aber keine freigegebenen Mediendateien. Ein vollständig heruntergeladenes Medienpaket konnte daher nicht geprüft werden.
+Der Download speichert den unveränderlichen Quest-Snapshot sowie alle tatsächlich referenzierten Medien mit erreichbarer URL. Native Dateien liegen im Dokumentverzeichnis; Webmedien im Cache API-Speicher, aufgelöste Blob-URLs werden nach Verwendung freigegeben. Fehlende Grafiken/Audios werden nicht als heruntergeladen ausgegeben. Der aktuelle Entwurf markiert Wyldo-Posen, Szenen und Siegel als `bundled`: Sie sind bereits Teil des installierten App-Bundles und benötigen keinen zusätzlichen HTTP-Download. Der Download speichert den Quest-Snapshot und vorhandene externe Medien; ein Erfolgshinweis unterscheidet fehlende weitere Dateien. Sprachaufnahmen sind nicht beigefügt.
 
 Spielstand, Hinweiseinstellungen und Outbox stehen gemeinsam in einem AsyncStorage-Datensatz je Konto. Das verhindert eine Lücke zwischen lokalem Fortschritt und dem zugehörigen ausstehenden Befehl. Auth-Tokens liegen nativ generationenweise in SecureStore; Websessions verwenden den Browserspeicher. Ein Kontowechsel erzeugt einen neuen Anwendungskontext und übernimmt keine fremde Warteschlange. Logout löscht die Sitzung; der lokal kontogetrennte Fortschritt bleibt für spätere Anmeldung erhalten. Der Übungsmodus besitzt einen eigenen Schlüssel und keine regulären Belohnungen.
 
@@ -14,6 +14,6 @@ GPS-Ereignisse verwenden die am Ereignis gemessene Genauigkeit/Position und den 
 
 ## Einschränkungen und Tests
 
-Keine Offline-Karten: OSM/Google-/Apple-Kacheln werden nicht vorab geladen. Die Kartenansicht nennt diese Grenze. Es gibt keine Offline-Routenführung. Browser-Neuladen ohne Verbindung zum Webserver ist ohne installierte PWA nicht zugesagt; die primäre App ist die installierte Expo-/native Anwendung.
+Keine Offline-Karten: OSM-Kacheln werden nicht vorab geladen. Die Kartenansicht nennt diese Grenze. Es gibt keine Offline-Routenführung. Browser-Neuladen ohne Verbindung zum Webserver ist ohne installierte PWA nicht zugesagt; die primäre App ist die installierte Expo-/native Anwendung.
 
 Unit-Tests prüfen Wiederherstellung, Kontotrennung, Reihenfolge, Netzfehler, Wiederholung, falsche Antworten und beschädigten Speicher. PostgreSQL prüft verspätete GPS-Übertragung und idempotente Operationen/Abzeichen. Ein kompletter echter Feldlauf mit heruntergeladenen finalen Bildern/Audios und Supabase-HTTP-Synchronisierung auf einem Smartphone ist noch nicht geprüft. Es fehlen die Voraussetzungen aus `verification.md`.

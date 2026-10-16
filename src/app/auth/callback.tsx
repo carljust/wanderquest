@@ -2,12 +2,18 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Text } from "react-native";
 import { Button, LoadingState, Notice, Screen } from "@/components/ui";
+import { exchangeAuthCode } from "@/features/auth/callback";
 import { friendlyError, requireBackend } from "@/lib/supabase";
 import { layout } from "@/theme";
 export default function Callback() {
-  const { code, next } = useLocalSearchParams<{
+  const {
+    code,
+    next,
+    error: providerError,
+  } = useLocalSearchParams<{
     code?: string;
     next?: string;
+    error?: string;
   }>();
   const [error, setError] = useState("");
   const started = useRef(false);
@@ -15,10 +21,15 @@ export default function Callback() {
     if (started.current) return;
     started.current = true;
     void (async () => {
+      if (providerError)
+        throw new Error(
+          providerError === "access_denied"
+            ? "Google-Anmeldung abgebrochen."
+            : "Die Anmeldung konnte nicht bestätigt werden.",
+        );
       const client = requireBackend();
       if (code) {
-        const { error } = await client.auth.exchangeCodeForSession(code);
-        if (error) throw error;
+        await exchangeAuthCode(code);
       }
       const { data } = await client.auth.getSession();
       if (!data.session)
@@ -27,7 +38,7 @@ export default function Callback() {
         );
       router.replace(next === "reset" ? "/auth/reset" : "/");
     })().catch((e: unknown) => setError(friendlyError(e)));
-  }, [code, next]);
+  }, [code, next, providerError]);
   return (
     <Screen>
       <Text style={layout.title}>Zurück zu Wyldo</Text>
