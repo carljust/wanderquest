@@ -1,6 +1,6 @@
 # WanderQuest 🌲
 
-Eine mobile Outdoor-Abenteuer-App für iOS und Android mit **React Native, Expo SDK 58, TypeScript und Expo Router**. Diese erste Version ist eine bewusst kleine, lauffähige Grundlage für die spätere Spielmechanik.
+Eine mobile Outdoor-Abenteuer-App für iOS und Android mit **React Native, Expo SDK 57, TypeScript und Expo Router**. Diese erste Version ist eine bewusst kleine, lauffähige Grundlage für die spätere Spielmechanik.
 
 ## Was bereits funktioniert
 
@@ -19,8 +19,9 @@ Eine mobile Outdoor-Abenteuer-App für iOS und Android mit **React Native, Expo 
 ## Voraussetzungen
 
 - Node.js **24.19.0** empfohlen (`.nvmrc`); unterstützt wird Node 24 ab 24.3.0.
-- npm 11 (erstellt und geprüft mit 11.9.0).
-- Für einen Smartphone-Test: aktuelle **Expo Go** App mit Unterstützung für SDK 58.
+- npm 11 (Lockfile mit 11.9.0 erstellt; saubere Installation auch mit 11.17.0 geprüft).
+- Für den Android-Smartphone-Test: **Expo Go mit Unterstützung für SDK 57**. Projekt und Expo Go müssen dieselbe SDK-Hauptversion verwenden; die Versionsnummer der Expo-Go-App ist eine andere Angabe.
+- Für iOS ist ebenfalls ein kompatibler Expo-Go-Client oder ein eigener Development Build erforderlich. Ein Test auf einem echten iOS-Gerät steht noch aus.
 
 ## Installation und Start auf dem Smartphone
 
@@ -34,9 +35,9 @@ npm ci
 npm start
 ```
 
-Smartphone und Entwicklungsrechner müssen im selben lokalen Netzwerk sein. Den QR-Code auf Android in Expo Go, auf iOS mit der Kamera scannen. Metro muss auf dem Entwicklungsrechner weiterlaufen. Es ist weder ein Expo-Konto noch ein eigener nativer Build nötig, um diese Version in Expo Go zu testen.
+Smartphone und Entwicklungsrechner müssen im selben lokalen Netzwerk sein. Den QR-Code auf Android in Expo Go scannen. Metro muss auf dem Entwicklungsrechner weiterlaufen. Für den Android-Test mit einem kompatiblen Expo-Go-Client ist weder ein Expo-Konto noch ein eigener nativer Build nötig.
 
-Falls die Verbindung nicht klappt: VPN/Gastnetz-Isolation und die Firewall für den Metro-Port prüfen. Mit `npm start -- --clear` lässt sich der lokale Bundler-Cache neu aufbauen. Ein Tunnel ist kein Bestandteil der Einrichtung.
+Falls die Verbindung nicht klappt: VPN/Gastnetz-Isolation und die Firewall für den Metro-Port prüfen. Mit `npm start -- --clear` lässt sich der lokale Bundler-Cache neu aufbauen. Für den Start über das Internet ist der unten beschriebene Smartphone-Befehl vorbereitet.
 
 ```bash
 npm run web       # Browser-Vorschau
@@ -44,7 +45,30 @@ npm run android   # Android-Emulator, falls lokal eingerichtet
 npm run ios       # iOS-Simulator, nur auf macOS mit Xcode
 ```
 
-In der Cloud laufen weder ein Smartphone noch Xcode/Android-Emulatoren. Ein dort gestarteter Metro-Prozess ist nicht automatisch über das lokale Netzwerk deines Smartphones erreichbar. Für den Smartphone-Test das Repository auf dem eigenen Rechner starten. Ein erfolgreicher JavaScript-Export ersetzt keinen Gerätetest.
+In der Cloud laufen weder ein Smartphone noch Xcode/Android-Emulatoren. Ein dort gestarteter Metro-Prozess ist nicht automatisch über das lokale Netzwerk deines Smartphones erreichbar. Über den folgenden Tunnel-Befehl lässt sich ein erreichbarer Codespace mit dem Smartphone verbinden. Ein erfolgreicher JavaScript-Export ersetzt keinen Gerätetest.
+
+## Android-Test aus GitHub Codespaces
+
+Im Codespaces-Terminal im Projektverzeichnis ausführen:
+
+```bash
+nvm install
+nvm use
+npm ci --include=dev
+npm run start:phone
+```
+
+`start:phone` startet die lokale Expo-CLI für SDK 57 mit Expo Go, einem ngrok-Tunnel und geleertem Metro-Cache. Die Tunnel-Hilfe `@expo/ngrok` wird mit den Entwicklungsabhängigkeiten installiert. Das Terminal und der Codespace müssen während des Tests weiterlaufen. Den neuen QR-Code in Expo Go auf dem Android-Gerät öffnen.
+
+Bei einem bereits geklonten Codespace zuerst den laufenden Server mit `Control + C` beenden und die Korrektur übernehmen:
+
+```bash
+git pull --ff-only
+npm ci --include=dev
+npm run start:phone
+```
+
+Der Tunnel verwendet bei SDK 57 bereits ngrok über `--tunnel`; der Startbefehl ist vollständig in `package.json` hinterlegt. Falls `git pull` lokale Änderungen meldet, diese vor dem Aktualisieren sichern. Für Codespaces nur vorhandenes kostenloses Kontingent nutzen und den Codespace nach dem Test stoppen.
 
 ## Prüfungen
 
@@ -57,7 +81,7 @@ npm run export:native  # JavaScript-/Asset-Export für iOS und Android
 
 Die nativen Exporte erstellen keine signierten App-Binaries und benötigen keine Apple-/Google-Zugangsdaten.
 
-Die Browsertests prüfen Navigation, Filter, Missionsdetails, die persistente Merkliste, Kartenvorschau und Fehlerzustände in einer mobilen Bildschirmgröße. Sie starten und beenden ihren eigenen Expo-Webserver auf Port 8081:
+Die Browsertests prüfen zusätzlich das von Expo Go abgerufene Android-Startmanifest: Seine SDK-Version muss zur installierten Expo-Version passen. Außerdem prüfen sie Navigation, Filter, Missionsdetails, die persistente Merkliste, Kartenvorschau und Fehlerzustände in einer mobilen Bildschirmgröße. Sie starten und beenden ihren eigenen Expo-Webserver auf Port 8081, sofern dort noch kein verwendbarer Server läuft:
 
 ```bash
 npx playwright install chromium

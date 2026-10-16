@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, jest, test } from "@jest/globals";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
-  fireEvent,
-  render,
+  fireEventAsync,
+  renderAsync,
   screen,
   waitFor,
 } from "@testing-library/react-native";
@@ -37,21 +37,21 @@ describe("bookmark hydration and storage failures", () => {
 
   test("keeps existing bookmarks and persists changes across a remount", async () => {
     await AsyncStorage.setItem(BOOKMARKS_KEY, '["kiefernlicht"]');
-    const view = await render(
+    const view = await renderAsync(
       <MissionProvider>
         <BookmarkProbe />
       </MissionProvider>,
     );
     await screen.findByText("kiefernlicht");
     await screen.findByText("ready");
-    await fireEvent.press(screen.getByRole("button", { name: "merken" }));
+    await fireEventAsync.press(screen.getByRole("button", { name: "merken" }));
     await waitFor(async () =>
       expect(await AsyncStorage.getItem(BOOKMARKS_KEY)).toBe(
         '["kiefernlicht","spiegelsee"]',
       ),
     );
-    await view.unmount();
-    await render(
+    await view.unmountAsync();
+    await renderAsync(
       <MissionProvider>
         <BookmarkProbe />
       </MissionProvider>,
@@ -64,14 +64,14 @@ describe("bookmark hydration and storage failures", () => {
     jest
       .mocked(AsyncStorage.getItem)
       .mockRejectedValueOnce(new Error("read failed"));
-    await render(
+    await renderAsync(
       <MissionProvider>
         <BookmarkProbe />
       </MissionProvider>,
     );
     await screen.findByText(/Deine Merkliste konnte nicht geladen werden/);
     await screen.findByText("ready");
-    await fireEvent.press(screen.getByRole("button", { name: "merken" }));
+    await fireEventAsync.press(screen.getByRole("button", { name: "merken" }));
     expect(await screen.findByText("spiegelsee")).toBeTruthy();
     expect(await AsyncStorage.getItem(BOOKMARKS_KEY)).toBe('["kiefernlicht"]');
   });

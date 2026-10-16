@@ -1,4 +1,4 @@
-import { Tabs } from "expo-router/js-tabs";
+import { Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon } from "@/components/ui";
 import { colors } from "@/theme";
