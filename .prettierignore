@@ -5,3 +5,9 @@ coverage/
 test-results/
 playwright-report/
 package-lock.json
+# Preserve the user-supplied design reference bundle verbatim.
+docs/wyldo_codex_designpaket_v1/
+# Preserve the uploaded requirements document verbatim.
+docs/PFLICHTENHEFT.md
+# Preserve the current pasted development assignment verbatim.
+docs/reviews/phase-1-2-request.md

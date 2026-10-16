@@ -73,9 +73,12 @@ test("eight-station practice quest, hints, persistence, mute, finish and profile
       .filter({ visible: true }),
   ).toBeVisible();
   await capture(page, "details");
-  await page.getByRole("button", { name: "Übungsabenteuer starten" }).click();
+  await page.getByRole("button", { name: "Zum Startpunkt navigieren" }).click();
+  await page.getByRole("button", { name: "Zur Spielansicht" }).click();
   for (const station of quest.stations) {
-    await expect(page.getByText(station.title, { exact: true })).toBeVisible();
+    await expect(
+      page.getByText(station.title, { exact: true }).filter({ visible: true }),
+    ).toBeVisible();
     await page.getByRole("button", { name: "Ankunft simulieren" }).click();
     await expect(
       page.getByRole("button", { name: "Dialog überspringen · zur Aufgabe" }),
@@ -231,7 +234,8 @@ test("downloaded practice content plays offline and survives reconnect and reloa
   await page
     .getByRole("button", { name: "Quest-Inhalte herunterladen", exact: true })
     .click();
-  await page.getByRole("button", { name: "Übungsabenteuer starten" }).click();
+  await page.getByRole("button", { name: "Zum Startpunkt navigieren" }).click();
+  await page.getByRole("button", { name: "Zur Spielansicht" }).click();
   await context.setOffline(true);
   await expect(
     page.getByText(/Offline · Antworten werden/).filter({ visible: true }),

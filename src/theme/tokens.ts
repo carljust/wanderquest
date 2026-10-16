@@ -1,0 +1,35 @@
+// Two surfaces of one brand: light discovery, immersive quest gameplay.
+export const tokens = {
+  font: {
+    display: "BreeSerif_400Regular",
+    body: "NunitoSans_400Regular",
+    strong: "NunitoSans_700Bold",
+  },
+  touch: { minimum: 48 },
+  space: { small: 8, medium: 12, large: 16, section: 24 },
+  radius: { card: 22, panel: 26, pill: 32 },
+  adventure: {
+    gold: "#E5B94A",
+    goldEdge: "#BA9459",
+    cream: "#FFF9EF",
+    forest: "#10291E",
+    ink: "#233029",
+    forestPanel: "#173F32",
+    leaf: "#447D30",
+    leafLight: "#79AC45",
+    parchment: "#F8EFD9",
+    orange: "#DB6A24",
+    faded: "#D5DCCB",
+  },
+  discovery: {
+    background: "#F5F3E9",
+    paper: "#FFFCF5",
+    green: "#315E38",
+    deep: "#0E3528",
+    ink: "#233C2D",
+    muted: "#647063",
+    border: "#E2E3D8",
+    accent: "#8DAE49",
+    gold: "#E9B44A",
+  },
+} as const;

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Wyldo – Designvergleich</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: system-ui, sans-serif;
+        background: #10291e;
+        color: #fff9ef;
+      }
+      body {
+        max-width: 1100px;
+        margin: auto;
+        padding: 24px;
+      }
+      h1,
+      h2 {
+        color: #e5b94a;
+      }
+      a {
+        color: #f0ce78;
+      }
+      p {
+        line-height: 1.6;
+        max-width: 80ch;
+      }
+      nav {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+      }
+      nav a {
+        border: 1px solid #ba9459;
+        border-radius: 20px;
+        padding: 12px 20px;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+      figure {
+        margin: 0;
+      }
+      figcaption {
+        padding: 12px 0;
+        font-weight: bold;
+      }
+      img {
+        width: 100%;
+        max-width: 390px;
+        height: auto;
+        border-radius: 18px;
+        border: 1px solid #ba9459;
+      }
+      section {
+        padding: 24px 0;
+        border-top: 1px solid #ba9459;
+      }
+      .small {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+      @media (max-width: 600px) {
+        body {
+          padding: 14px;
+        }
+        .pair,
+        .small {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Wyldo – Design zur Freigabe</h1>
+    <p>
+      Phase 1 und 2 · 16.10.2026. Für Questdetails und Navigation links die
+      verbindliche Referenz, rechts die laufende App in Expo Web. Die Aufnahmen
+      zeigen echte UI, keine montierten Mockups. Smartphone-Abnahme und die
+      weiteren Spielfunktionen stehen noch aus.
+      <a href="reviews/phase-1-2-acceptance.md"
+        >Aktueller Prüfbericht und Einschränkungen</a
+      >.
+    </p>
+    <nav aria-label="Ansichten">
+      <a href="#entdecken">Entdecken</a><a href="#details">Questdetails</a
+      ><a href="#navigation">Navigation</a><a href="#klein">Kleine Displays</a>
+    </nav>
+    <section id="entdecken">
+      <h2>Entdecken – neuer heller Aufbau</h2>
+      <p>
+        Die neueste Referenz ist das helle OpenQuest-Chatbild. Es ersetzt für
+        die Übersicht den bisherigen dunklen v1-Aufbau. Wyldo und der
+        Originalfuchs bleiben erhalten. Naturkopf, überlappende Suche, große
+        Bildkarte und kleinere Aktionskarten stehen auf Creme; vier Filterchips
+        öffnen eine echte Auswahl. Die XP-/Levelkarte im Header ist im
+        Übungsmodus eine ausdrücklich gekennzeichnete Vorschau, kein regulärer
+        Kontostand.
+        <a href="reviews/discovery-layout.md"
+          >Referenzstatus, Abweichungen und Datenregeln</a
+        >.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Übersicht · 360×800</figcaption>
+          <img
+            src="screenshots/phase-1-2/01-discover.png"
+            alt="Aktuelle helle Entdecken-Ansicht"
+          />
+        </figure>
+        <figure>
+          <figcaption>Aktionskarten und Filter · gescrollt</figcaption>
+          <img
+            src="screenshots/phase-1-2/01-discover-actions.png"
+            alt="Funktionierende Kapitel- und Downloadkarten mit Filterchips"
+          />
+        </figure>
+      </div>
+      <figure>
+        <figcaption>Filterauswahl</figcaption>
+        <img
+          src="screenshots/phase-1-2/01-discover-filters.png"
+          alt="Geöffnete Filterauswahl für Dauer"
+          loading="lazy"
+        />
+      </figure>
+    </section>
+    <section id="details">
+      <h2>Questdetails</h2>
+      <p>
+        Dauer, Strecke, Rätsel-Schwierigkeit und Sterneübersicht mit
+        Bewertungsanzahl stehen direkt unter dem Questbild. Ohne vorhandene
+        Rezensionen bleibt die Wertung leer. Geschichte und Aktionen sind
+        scrollbar, die Navigation zum Startpunkt bleibt erreichbar. Startpunkt,
+        Altersstatus und Abschlussabzeichen sind in der scrollbaren Ansicht
+        ergänzt. Ungeprüfte Strecke und Dauer werden nicht als gemessene Daten
+        übernommen.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Freigegebene Referenz</figcaption>
+          <img
+            src="wyldo_codex_designpaket_v1/mockups/02_quest_details.png"
+            alt="Referenz Questdetails"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <figcaption>Umgesetzt · 360×800</figcaption>
+          <img
+            src="screenshots/phase-1-2/02-quest-details.png"
+            alt="Tatsächliche Questdetails"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+      <figure>
+        <figcaption>Startpunkt und Belohnung · gescrollt</figcaption>
+        <img
+          src="screenshots/phase-1-2/02-quest-rewards.png"
+          alt="Abzeichen und Übungs-XP in den Questdetails"
+          loading="lazy"
+        />
+      </figure>
+    </section>
+    <section id="navigation">
+      <h2>Karte und Richtung</h2>
+      <p>
+        Goldener Peilpfeil mit berechneter Entfernung; der Entwicklungsmodus
+        verwendet ausdrücklich virtuelle GPS-Daten. Echte OSM-Karte mit
+        Attribution. Ohne geprüfte Weggeometrie keine erfundene Wanderroute.
+        Wyldo erscheint hier nur beim Aufruf seines Tipps.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Freigegebene Referenz</figcaption>
+          <img
+            src="wyldo_codex_designpaket_v1/mockups/03_navigation_richtung.png"
+            alt="Referenz Richtung"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <figcaption>Umgesetzt · 390×844</figcaption>
+          <img
+            src="screenshots/phase-1-2/03-navigation-direction.png"
+            alt="Tatsächlicher Richtungsmodus"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+      <figure>
+        <figcaption>Funktionaler Kartenwechsel · 390×844</figcaption>
+        <img
+          src="screenshots/phase-1-2/03-navigation-map.png"
+          alt="Geladene OpenStreetMap-Karte"
+          loading="lazy"
+        />
+      </figure>
+    </section>
+    <section id="klein">
+      <h2>Schmales Android-Format und iPhone-Format</h2>
+      <p>
+        Kein horizontaler Bildüberlauf, Hauptaktionen in Details und Navigation
+        bleiben erreichbar. Die Entfernung steht auf niedrigen Displays über dem
+        Kompass.
+      </p>
+      <div class="pair">
+        <figure>
+          <figcaption>Entdecken · 390×844</figcaption>
+          <img
+            src="screenshots/phase-1-2/01-discover-iphone.png"
+            alt="Entdecken im iPhone-Viewport"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <figcaption>Details · 390×844</figcaption>
+          <img
+            src="screenshots/phase-1-2/02-quest-details-iphone.png"
+            alt="Questdetails im iPhone-Viewport"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+      <h3>320×640 · kleine Ansicht</h3>
+      <div class="small">
+        <figure>
+          <figcaption>Entdecken</figcaption>
+          <img
+            src="screenshots/phase-1-2/01-discover-small.png"
+            alt="Entdecken auf kleinem Display"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <figcaption>Questdetails</figcaption>
+          <img
+            src="screenshots/phase-1-2/02-quest-details-small.png"
+            alt="Questdetails auf kleinem Display"
+            loading="lazy"
+          />
+        </figure>
+        <figure>
+          <figcaption>Navigation</figcaption>
+          <img
+            src="screenshots/phase-1-2/03-navigation-small.png"
+            alt="Navigation auf kleinem Display"
+            loading="lazy"
+          />
+        </figure>
+      </div>
+    </section>
+    <p>
+      Nach dieser Sichtprüfung wartet die Entwicklung auf deine Designfreigabe.
+      <a href="development-plan.md">Entwicklungsplan</a> ·
+      <a href="../README.md">Startanleitung</a>
+    </p>
+  </body>
+</html>

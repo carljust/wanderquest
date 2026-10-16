@@ -1,124 +1,275 @@
 import { router } from "expo-router";
-import { Text, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import {
+  AdventureButton,
+  AdventurePanel,
+  AdventureScreen,
+  adventure,
+  BackWoodButton,
+  gameStyles,
+  TopQuest,
+  WoodButton,
+} from "@/components/adventure-ui";
+import { Scene } from "@/components/artwork";
 import { PracticeEntry } from "@/components/practice-entry";
-import { Button, LoadingState, Notice, Screen } from "@/components/ui";
-import { QuestStatus } from "@/components/quest-ui";
-import { StoryBody, StoryHero } from "@/components/story-ui";
+import { Icon, LoadingState } from "@/components/ui";
+import { AdventureStatus } from "@/components/adventure-status";
+import { QuestOverview } from "@/components/quest-overview";
+import { WyldoMessage } from "@/components/wyldo-message";
 import { WyldoCompanion } from "@/features/companion/wyldo-companion";
 import { useQuest } from "@/features/quest/provider";
 import { useAuth } from "@/features/auth/provider";
-import { layout } from "@/theme";
 export default function QuestDetails() {
   const q = useQuest();
   const auth = useAuth();
+  const [preparation, setPreparation] = useState(false);
   if (q.loading)
     return (
-      <Screen>
+      <AdventureScreen>
         <LoadingState />
-      </Screen>
-    );
-  if (!q.quest)
-    return (
-      <Screen>
-        <Text style={layout.heading}>
-          Noch keine Quest für draußen freigegeben.
-        </Text>
-        <PracticeEntry />
-        <Button
-          label="Erneut laden"
-          onPress={() => void q.refresh().catch(() => undefined)}
-        />
-      </Screen>
+      </AdventureScreen>
     );
   const quest = q.quest;
-  return (
-    <Screen fullBleed bottomInset>
-      <StoryHero
-        title={quest.title}
-        eyebrow="EXTERNSTEINE · TEUTOBURGER WALD"
-        height={430}
-        back
-      />
-      <StoryBody>
-        <QuestStatus />
-        <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 4 }}>
-          <Text style={[layout.body, { flex: 1 }]}>{quest.subtitle}</Text>
-          <WyldoCompanion
-            state="idle"
-            reducedMotion={q.preferences.reducedMotion}
-            size={90}
+  if (!quest)
+    return (
+      <AdventureScreen>
+        <BackWoodButton />
+        <AdventurePanel paper>
+          <Text style={gameStyles.paperTitle}>
+            Noch keine Quest für draußen freigegeben.
+          </Text>
+          <PracticeEntry />
+          <AdventureButton
+            label="Erneut laden"
+            onPress={() => void q.refresh().catch(() => undefined)}
           />
-        </View>
-        <Button
-          label={
-            q.run
-              ? "Abenteuer fortsetzen"
-              : auth.practice
-                ? "Übungsabenteuer starten"
-                : "Abenteuer starten"
-          }
+        </AdventurePanel>
+      </AdventureScreen>
+    );
+  const saved = q.savedQuestIds.includes(quest.id);
+  const reward = 100 * quest.stations.length + 500;
+  return (
+    <AdventureScreen
+      tabs
+      footer={
+        <AdventureButton
+          label={q.run ? "Abenteuer fortsetzen" : "Zum Startpunkt navigieren"}
+          icon="navigate"
           disabled={q.busy || (!auth.practice && !quest.fieldReady)}
           onPress={() =>
             void q
               .start()
               .then(() =>
-                router.push(q.run?.finished ? "/quest/finish" : "/quest/play"),
+                router.push(
+                  q.run?.finished ? "/quest/finish" : "/quest/navigate",
+                ),
               )
               .catch(() => undefined)
           }
         />
-        {!auth.practice && !quest.fieldReady && (
-          <>
-            <Notice>
-              Der Weg wird noch geprüft. Die gesamte Geschichte ist bereits als
-              Übung spielbar.
-            </Notice>
-            <PracticeEntry />
-          </>
-        )}
-        <Text style={layout.heading}>Die Geschichte</Text>
-        <Text style={layout.body}>{quest.story}</Text>
-        <Text style={layout.heading}>Deine Reise auf einen Blick</Text>
-        <View style={layout.card}>
-          {[
-            ["Strecke", quest.distance],
-            ["Dauer", quest.duration],
-            ["Schwierigkeit", quest.difficulty],
-            ["Startpunkt", quest.start],
-          ].map(([label, value]) => (
-            <View key={label} style={{ gap: 4 }}>
-              <Text style={layout.eyebrow}>{label}</Text>
-              <Text style={layout.body}>{value}</Text>
-            </View>
-          ))}
+      }
+    >
+      <View
+        style={{
+          height: 320,
+          margin: -14,
+          marginBottom: 0,
+          overflow: "hidden",
+        }}
+      >
+        <Scene />
+        <LinearGradient
+          colors={["#10231B00", "#0B2119F5"]}
+          locations={[0.35, 1]}
+          style={StyleSheet.absoluteFill}
+        />
+        <View style={{ position: "absolute", left: 5, top: 40 }}>
+          <WyldoCompanion
+            state="wave"
+            size={145}
+            reducedMotion={q.preferences.reducedMotion}
+          />
         </View>
-        <Text style={layout.heading}>Das gehört in deinen Rucksack</Text>
-        {quest.preparation.map((item) => (
-          <Text style={layout.body} key={item}>
-            • {item}
-          </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            padding: 16,
+          }}
+        >
+          <BackWoodButton />
+          <WoodButton
+            label={saved ? "Quest nicht mehr merken" : "Quest merken"}
+            icon={saved ? "heart" : "heart-outline"}
+            onPress={() => void q.toggleSaved(quest.id).catch(() => undefined)}
+          />
+        </View>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 16,
+            left: 18,
+            right: 18,
+            gap: 9,
+          }}
+        >
+          <TopQuest />
+          <Text style={gameStyles.title}>{quest.title}</Text>
+          <Text style={gameStyles.body}>{quest.subtitle}</Text>
+        </View>
+      </View>
+      <AdventureStatus />
+      <QuestOverview quest={quest} />
+      <AdventurePanel paper>
+        <Text style={gameStyles.paperTitle}>Über diese Quest</Text>
+        <Text style={gameStyles.paperBody}>{quest.story}</Text>
+      </AdventurePanel>
+      <AdventurePanel style={{ padding: 14 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Icon name="location" color={adventure.gold} size={23} />
+          <Text style={gameStyles.heading}>Dein Startpunkt</Text>
+        </View>
+        <Text style={gameStyles.body}>{quest.start}</Text>
+        <Text style={[gameStyles.body, { fontSize: 13, lineHeight: 19 }]}>
+          Gemeinsam mit Erwachsenen auf Entdeckungstour. Wyldo richtet sich an
+          Familien ab etwa 7 Jahren; die genaue Alters- und Routenfreigabe
+          dieser Quest steht noch aus.
+        </Text>
+      </AdventurePanel>
+      <AdventurePanel
+        style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          justifyContent: "space-around",
+          gap: 10,
+          padding: 12,
+        }}
+      >
+        {[
+          [String(quest.stations.length), "Kapitel"],
+          [
+            String(
+              new Set(quest.stations.map((s) => s.seal).filter(Boolean)).size,
+            ),
+            "Steinsiegel",
+          ],
+          [`${reward}`, "Übungs-XP · Vorschau"],
+        ].map(([value, label]) => (
+          <View
+            key={label}
+            style={{ minWidth: "40%", alignItems: "center", gap: 3 }}
+          >
+            <Text
+              style={{ color: adventure.gold, fontWeight: "800", fontSize: 21 }}
+            >
+              {value}
+            </Text>
+            <Text style={[gameStyles.body, { fontSize: 13, lineHeight: 18 }]}>
+              {label}
+            </Text>
+          </View>
         ))}
-        <Button
-          label={
-            q.downloaded
-              ? "Quest erneut herunterladen"
-              : "Quest-Inhalte herunterladen"
-          }
-          icon="download-outline"
-          secondary
-          disabled={q.busy}
-          onPress={() => void q.download().catch(() => undefined)}
-        />
-        <Button
-          label="Karte und Stationen ansehen"
-          secondary
-          icon="map-outline"
-          onPress={() => router.push("/map")}
-        />
-        <Notice warning>
-          {quest.routeStatus} Offline-Karten stehen nicht zur Verfügung.
-        </Notice>
-      </StoryBody>
-    </Screen>
+      </AdventurePanel>
+      <AdventurePanel paper>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <Icon name="ribbon-outline" size={32} color={adventure.ink} />
+          <View style={{ flex: 1, gap: 3 }}>
+            <Text
+              style={[
+                gameStyles.paperBody,
+                { fontFamily: "NunitoSans_700Bold" },
+              ]}
+            >
+              {quest.badge.name}
+            </Text>
+            <Text
+              style={[gameStyles.paperBody, { fontSize: 13, lineHeight: 19 }]}
+            >
+              {quest.badge.description}
+            </Text>
+          </View>
+        </View>
+        <Text style={[gameStyles.paperBody, { fontSize: 12, lineHeight: 17 }]}>
+          Abzeichen als Abschlussbelohnung. Im Übungsmodus nur Vorschau;
+          reguläre XP und Level werden erst in einer späteren Phase eingeführt.
+        </Text>
+      </AdventurePanel>
+      <Text style={gameStyles.heading}>Dein Abenteuer</Text>
+      <AdventureButton
+        label="8 Kapitel ansehen"
+        variant="glass"
+        icon="book-outline"
+        onPress={() => router.push("/quest/progress")}
+      />
+      <AdventureButton
+        label="4 Steinsiegel entdecken"
+        variant="glass"
+        icon="sparkles-outline"
+        onPress={() => router.push("/quest/progress")}
+      />
+      <WyldoMessage reducedMotion={q.preferences.reducedMotion}>
+        Am Startpunkt beginnt unser Abenteuer!
+      </WyldoMessage>
+      <AdventureButton
+        label="Bitte auf den Wegen bleiben"
+        variant="glass"
+        icon="warning-outline"
+        onPress={() => setPreparation(!preparation)}
+      />
+      {preparation && (
+        <AdventurePanel paper>
+          <Text style={gameStyles.paperTitle}>Gut vorbereitet losziehen</Text>
+          {quest.preparation.map((text) => (
+            <Text key={text} style={gameStyles.paperBody}>
+              • {text}
+            </Text>
+          ))}
+          <Text style={gameStyles.paperBody}>{quest.start}</Text>
+          <Text style={gameStyles.paperBody}>
+            {quest.duration} · {quest.difficulty}
+          </Text>
+          <Text style={gameStyles.paperBody}>{quest.routeStatus}</Text>
+        </AdventurePanel>
+      )}
+      {!auth.practice && !quest.fieldReady && (
+        <AdventurePanel paper>
+          <Text style={gameStyles.paperBody}>
+            Die Outdoor-Route ist noch nicht freigegeben. Die gesamte Geschichte
+            ist im gekennzeichneten Übungsmodus spielbar.
+          </Text>
+          <PracticeEntry />
+        </AdventurePanel>
+      )}
+      <AdventureButton
+        label={saved ? "Quest gemerkt" : "Quest merken"}
+        variant="paper"
+        icon={saved ? "bookmark" : "bookmark-outline"}
+        onPress={() => void q.toggleSaved(quest.id).catch(() => undefined)}
+      />
+      <AdventureButton
+        label={
+          q.downloaded
+            ? "Quest erneut herunterladen"
+            : "Quest-Inhalte herunterladen"
+        }
+        variant="paper"
+        icon="download-outline"
+        disabled={q.busy}
+        onPress={() => void q.download().catch(() => undefined)}
+      />
+      {Boolean(q.notice) && (
+        <AdventurePanel paper>
+          <Text style={gameStyles.paperBody}>{q.notice}</Text>
+        </AdventurePanel>
+      )}
+      <AdventureButton
+        label="Karte und Stationen ansehen"
+        variant="glass"
+        icon="map-outline"
+        onPress={() => router.push("/map")}
+      />
+    </AdventureScreen>
   );
 }

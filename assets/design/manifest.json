@@ -1,8 +1,14 @@
 {
   "createdAt": "2026-10-16",
-  "reference": "User supplied four Wyldo poses and approved ten-screen mockup",
+  "reference": "docs/wyldo_codex_designpaket_v1: approved mockups 01–03 and original_fuchs_vier_posen.png, received on main 3234cff",
   "wyldo-poses.png": "AI-assisted preparation of the supplied fox reference as four whole-image poses; not a layered character rig.",
   "quest-scenes.png": "Supplementary generated illustrations matching the mockup; not documentary photographs, route evidence or physical treasure locations.",
   "stone-seals.png": "Supplementary generated digital sandstone seals: courage spiral, curiosity leaf, listening water, togetherness paths.",
-  "../icon.png": "Generated Wyldo portrait derived from the supplied fox identity."
+  "../icon.png": "Generated Wyldo portrait derived from the supplied fox identity.",
+  "wyldo-original-poses.png": "Unmodified copy of the user-supplied original_fuchs_vier_posen.png (2048×682 RGBA). Whole poses are selected through clipped React Native viewports; no facial layers or character rig.",
+  "adventure-forest.png": "Supplementary generated forest/rock illustration guided by the approved adventure mockups. No embedded UI text, no documentary photo and no route evidence.",
+  "game-atlas.png": "Supplementary generated wooden Wyldo wordmark, decorative medal, fantasy map and blank parchment. Neither map nor medal represents checked routes or granted rewards. The current quest UI uses blank parchment; the previous wooden logo is retained as an asset.",
+  "fonts": "Bree Serif Regular and Nunito Sans Regular/SemiBold/Bold, bundled via @expo-google-fonts. OFL licenses preserved in assets/licenses/.",
+  "discover-landscape.png": "Supplementary generated bright Externsteine/lake/woodland header illustration following the latest light overview mockup supplied in chat on 2026-10-16. No embedded text or mascot, no documentary photograph or verified route. Original Wyldo is composited in React Native.",
+  "discovery-reference": "Latest user-supplied light OpenQuest overview in chat supersedes v1 for page structure only; Wyldo branding and original fox are preserved. See docs/reviews/discovery-layout.md."
 }

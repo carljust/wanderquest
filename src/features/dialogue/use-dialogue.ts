@@ -1,49 +1,71 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useAudioPlayer } from "expo-audio";
+import { createAudioPlayer, type AudioPlayer } from "expo-audio";
 import * as Speech from "expo-speech";
 import { useFocusEffect } from "expo-router";
 import type { CompanionState, Dialogue } from "@/domain/quest";
+
+type Recording = {
+  player: AudioPlayer;
+  listener?: { remove: () => void };
+};
 
 export function useDialogue(muted: boolean) {
   const [dialogue, setDialogue] = useState<Dialogue | null>(null);
   const [state, setState] = useState<CompanionState>("idle");
   const [mouthPulse, setMouthPulse] = useState(0);
   const [audioError, setAudioError] = useState("");
-  const player = useAudioPlayer(null);
+  // A recording owns its player. TTS/text never need an empty native player.
+  // useAudioPlayer's automatic release can run before a focus cleanup on unmount;
+  // calling pause on that released shared object rejects on native devices.
+  const audio = useRef<Recording | null>(null);
+  const focused = useRef(false);
+  const releaseAudio = useCallback(() => {
+    const current = audio.current;
+    audio.current = null;
+    if (!current) return;
+    try {
+      current.listener?.remove();
+    } catch {
+      // Native teardown may already have removed the subscription.
+    }
+    try {
+      // release stops playback and frees resources; never pause after release.
+      current.player.release();
+    } catch {
+      // Releasing an already invalidated native resource must not crash navigation.
+    }
+  }, []);
 
   const generation = useRef(0);
-  const stop = useCallback(() => {
+  const cancelPlayback = useCallback(() => {
     generation.current++;
-    void Speech.stop().catch(() => undefined);
-    player.pause();
+    releaseAudio();
+    return Speech.stop().catch(() => undefined);
+  }, [releaseAudio]);
+  const stop = useCallback(() => {
+    void cancelPlayback();
     setState("idle");
-  }, [player]);
+  }, [cancelPlayback]);
   useFocusEffect(
-    useCallback(
-      () => () => {
+    useCallback(() => {
+      focused.current = true;
+      return () => {
+        focused.current = false;
         stop();
-      },
-      [stop],
-    ),
+      };
+    }, [stop]),
   );
   useEffect(() => {
-    if (muted) {
-      generation.current++;
-      void Speech.stop();
-      player.pause();
-    }
-  }, [muted, player]);
-  useEffect(() => {
-    const sub = player.addListener("playbackStatusUpdate", (status) => {
-      if (status.didJustFinish) {
-        setState("idle");
-        setDialogue(null);
-      }
+    if (!muted) return;
+    const stopped = cancelPlayback();
+    const token = generation.current;
+    void stopped.then(() => {
+      if (token === generation.current) setState("idle");
     });
-    return () => sub.remove();
-  }, [player]);
+  }, [muted, cancelPlayback]);
   const play = useCallback(
     async (line: Dialogue, audioUrl?: string) => {
+      if (!focused.current) return;
       stop();
       setDialogue(line);
       setAudioError("");
@@ -54,7 +76,23 @@ export function useDialogue(muted: boolean) {
       const token = generation.current;
       try {
         if (audioUrl) {
-          player.replace(audioUrl);
+          const player = createAudioPlayer(audioUrl);
+          const current: Recording = { player };
+          audio.current = current;
+          current.listener = player.addListener(
+            "playbackStatusUpdate",
+            (status) => {
+              if (
+                status.didJustFinish &&
+                token === generation.current &&
+                audio.current === current
+              ) {
+                releaseAudio();
+                setState("idle");
+                setDialogue(null);
+              }
+            },
+          );
           player.play();
           setState("talk");
           return;
@@ -97,13 +135,15 @@ export function useDialogue(muted: boolean) {
           },
         });
       } catch {
+        if (token !== generation.current) return;
+        releaseAudio();
         setState("idle");
         setAudioError(
           "Audio konnte nicht gestartet werden. Bitte erneut versuchen oder den Text lesen.",
         );
       }
     },
-    [muted, player, stop],
+    [muted, releaseAudio, stop],
   );
   const skip = useCallback(() => {
     stop();

@@ -10,6 +10,7 @@ export type Snapshot = {
   downloaded: boolean;
   assetUris: Record<string, string>;
   preferences: Preferences;
+  savedQuestIds: string[];
 };
 export const emptySnapshot = (): Snapshot => ({
   schema: 1,
@@ -19,6 +20,7 @@ export const emptySnapshot = (): Snapshot => ({
   downloaded: false,
   assetUris: {},
   preferences: defaultPreferences,
+  savedQuestIds: [],
 });
 const key = (owner: string) => `wyldo.v1.${owner}`;
 export async function readSnapshot(owner: string): Promise<Snapshot> {
@@ -29,7 +31,13 @@ export async function readSnapshot(owner: string): Promise<Snapshot> {
     if (data.schema !== 1 || !Array.isArray(data.outbox))
       throw new Error("schema");
     if (data.run?.mode === "practice") data.run.awarded = false;
-    return data;
+    return {
+      ...emptySnapshot(),
+      ...data,
+      savedQuestIds: Array.isArray(data.savedQuestIds)
+        ? data.savedQuestIds
+        : [],
+    };
   } catch {
     throw new Error(
       "Der lokale Spielstand ist beschädigt. Er bleibt erhalten; lade die Daten erneut oder setze ausschließlich den Übungslauf zurück.",

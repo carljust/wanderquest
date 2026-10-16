@@ -1,19 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { Linking, Text, View } from "react-native";
 import { WebView } from "react-native-webview";
-import type { Quest, Fix } from "@/domain/quest";
+import type { QuestMapProps } from "./map-model";
 import { Button, Notice } from "@/components/ui";
 import { mapHtml, mapPayload } from "./map-html";
 import { layout } from "@/theme";
 const source = { html: mapHtml() };
-export function QuestMap({ quest, fix }: { quest: Quest | null; fix?: Fix }) {
+export function QuestMap({ quest, fix, targetStationId }: QuestMapProps) {
   const ref = useRef<WebView>(null);
   const [attempt, setAttempt] = useState(0);
   const [status, setStatus] = useState("loading");
   const [externalError, setExternalError] = useState("");
   useEffect(() => {
-    ref.current?.postMessage(JSON.stringify(mapPayload(quest, fix)));
-  }, [quest, fix, status]);
+    ref.current?.postMessage(
+      JSON.stringify(mapPayload(quest, fix, targetStationId)),
+    );
+  }, [quest, fix, targetStationId, status]);
   useEffect(() => {
     const timer = setTimeout(
       () =>
