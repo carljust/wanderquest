@@ -1,6 +1,6 @@
 # Wyldo – Designreview, Phasen 1–3
 
-Stand: 16.10.2026 · Branch `feat/wyldo-adventure-design-review` · Basis `3234cff` (Designpaket auf `main`). **Designfreigabe ausstehend.** Dieser Bericht belegt den UI-Schritt, keine vollständige Produktabnahme.
+Stand: 16.10.2026 · Branch `feat/wyldo-adventure-design-review` · Basis `3234cff` (Designpaket auf `main`). [Draft-Pull-Request #1](https://github.com/carljust/wanderquest/pull/1) · **Designfreigabe ausstehend.** Dieser Bericht belegt den UI-Schritt, keine vollständige Produktabnahme.
 
 ## Verbindliche Grundlage und Umfang
 
