@@ -125,6 +125,17 @@ export function QuestOverview({ quest }: { quest: Quest }) {
       <Text style={[gameStyles.body, { fontSize: 13, lineHeight: 18 }]}>
         Strecke: {quest.distance}
       </Text>
+      <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
+        <Icon name="people-outline" color={adventure.gold} size={18} />
+        <Text
+          style={[gameStyles.body, { flex: 1, fontSize: 13, lineHeight: 18 }]}
+        >
+          Altersempfehlung:{" "}
+          {quest.listing?.minimumAge === undefined
+            ? "noch nicht bestätigt"
+            : `ab ${quest.listing.minimumAge} Jahren`}
+        </Text>
+      </View>
       {!quest.fieldReady && (
         <Text style={[gameStyles.body, { fontSize: 12, lineHeight: 17 }]}>
           Outdoor-Dauer und Strecke sind noch nicht bestätigt. Die Schwierigkeit

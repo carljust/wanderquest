@@ -1,5 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Platform, StyleSheet, Text, View } from "react-native";
+import {
+  Animated,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { LinearGradient as SurfaceGradient } from "expo-linear-gradient";
 import Svg, {
   Circle,
   Defs,
@@ -19,6 +27,76 @@ import {
 import { Scene } from "./artwork";
 import { Icon, type IconName } from "./ui";
 import { relativeBearing, unwrapRotation } from "@/domain/navigation";
+export type NavigationMode = "map" | "direction";
+export function NavigationModeSwitch({
+  mode,
+  onChange,
+}: {
+  mode: NavigationMode;
+  onChange: (mode: NavigationMode) => void;
+}) {
+  return (
+    <View
+      accessibilityRole="tablist"
+      style={{
+        flexDirection: "row",
+        padding: 4,
+        borderRadius: 32,
+        borderWidth: 1.5,
+        borderColor: adventure.goldEdge,
+        backgroundColor: "#21332CCC",
+      }}
+    >
+      {(
+        [
+          { value: "map", label: "Karte", icon: "map-outline" },
+          { value: "direction", label: "Richtung", icon: "navigate" },
+        ] as const
+      ).map((item) => (
+        <Pressable
+          key={item.value}
+          accessibilityRole="tab"
+          accessibilityLabel={item.label}
+          accessibilityState={{ selected: mode === item.value }}
+          aria-selected={mode === item.value}
+          onPress={() => onChange(item.value)}
+          style={{ flex: 1 }}
+        >
+          <SurfaceGradient
+            colors={
+              mode === item.value
+                ? ["#FFF2CA", "#EDC667"]
+                : ["#263D3400", "#263D3400"]
+            }
+            style={{
+              minHeight: 50,
+              borderRadius: 28,
+              flexDirection: "row",
+              gap: 8,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Icon
+              name={item.icon}
+              size={22}
+              color={mode === item.value ? adventure.ink : adventure.cream}
+            />
+            <Text
+              style={{
+                fontSize: 18,
+                fontFamily: "NunitoSans_700Bold",
+                color: mode === item.value ? adventure.ink : adventure.cream,
+              }}
+            >
+              {item.label}
+            </Text>
+          </SurfaceGradient>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
 export function JourneyHeader({
   title,
   step = 0,

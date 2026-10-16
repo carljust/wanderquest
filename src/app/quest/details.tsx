@@ -14,9 +14,10 @@ import {
 } from "@/components/adventure-ui";
 import { Scene } from "@/components/artwork";
 import { PracticeEntry } from "@/components/practice-entry";
-import { LoadingState } from "@/components/ui";
+import { Icon, LoadingState } from "@/components/ui";
 import { AdventureStatus } from "@/components/adventure-status";
 import { QuestOverview } from "@/components/quest-overview";
+import { WyldoMessage } from "@/components/wyldo-message";
 import { WyldoCompanion } from "@/features/companion/wyldo-companion";
 import { useQuest } from "@/features/quest/provider";
 import { useAuth } from "@/features/auth/provider";
@@ -125,6 +126,18 @@ export default function QuestDetails() {
         <Text style={gameStyles.paperTitle}>Über diese Quest</Text>
         <Text style={gameStyles.paperBody}>{quest.story}</Text>
       </AdventurePanel>
+      <AdventurePanel style={{ padding: 14 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+          <Icon name="location" color={adventure.gold} size={23} />
+          <Text style={gameStyles.heading}>Dein Startpunkt</Text>
+        </View>
+        <Text style={gameStyles.body}>{quest.start}</Text>
+        <Text style={[gameStyles.body, { fontSize: 13, lineHeight: 19 }]}>
+          Gemeinsam mit Erwachsenen auf Entdeckungstour. Wyldo richtet sich an
+          Familien ab etwa 7 Jahren; die genaue Alters- und Routenfreigabe
+          dieser Quest steht noch aus.
+        </Text>
+      </AdventurePanel>
       <AdventurePanel
         style={{
           flexDirection: "row",
@@ -135,8 +148,13 @@ export default function QuestDetails() {
         }}
       >
         {[
-          ["8", "Kapitel"],
-          ["4", "Steinsiegel"],
+          [String(quest.stations.length), "Kapitel"],
+          [
+            String(
+              new Set(quest.stations.map((s) => s.seal).filter(Boolean)).size,
+            ),
+            "Steinsiegel",
+          ],
           [`${reward}`, "Übungs-XP · Vorschau"],
         ].map(([value, label]) => (
           <View
@@ -154,6 +172,30 @@ export default function QuestDetails() {
           </View>
         ))}
       </AdventurePanel>
+      <AdventurePanel paper>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <Icon name="ribbon-outline" size={32} color={adventure.ink} />
+          <View style={{ flex: 1, gap: 3 }}>
+            <Text
+              style={[
+                gameStyles.paperBody,
+                { fontFamily: "NunitoSans_700Bold" },
+              ]}
+            >
+              {quest.badge.name}
+            </Text>
+            <Text
+              style={[gameStyles.paperBody, { fontSize: 13, lineHeight: 19 }]}
+            >
+              {quest.badge.description}
+            </Text>
+          </View>
+        </View>
+        <Text style={[gameStyles.paperBody, { fontSize: 12, lineHeight: 17 }]}>
+          Abzeichen als Abschlussbelohnung. Im Übungsmodus nur Vorschau;
+          reguläre XP und Level werden erst in einer späteren Phase eingeführt.
+        </Text>
+      </AdventurePanel>
       <Text style={gameStyles.heading}>Dein Abenteuer</Text>
       <AdventureButton
         label="8 Kapitel ansehen"
@@ -167,24 +209,9 @@ export default function QuestDetails() {
         icon="sparkles-outline"
         onPress={() => router.push("/quest/progress")}
       />
-      <AdventurePanel
-        paper
-        style={{ flexDirection: "row", alignItems: "center", padding: 12 }}
-      >
-        <WyldoCompanion
-          state="idle"
-          size={78}
-          reducedMotion={q.preferences.reducedMotion}
-        />
-        <Text
-          style={[
-            gameStyles.paperTitle,
-            { flex: 1, fontSize: 21, lineHeight: 27 },
-          ]}
-        >
-          Am Startpunkt beginnt unser Abenteuer!
-        </Text>
-      </AdventurePanel>
+      <WyldoMessage reducedMotion={q.preferences.reducedMotion}>
+        Am Startpunkt beginnt unser Abenteuer!
+      </WyldoMessage>
       <AdventureButton
         label="Bitte auf den Wegen bleiben"
         variant="glass"

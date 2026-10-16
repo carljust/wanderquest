@@ -1,5 +1,7 @@
 # Wyldo – Designreview, Phasen 1–3
 
+**Aktueller Stand:** [Phase 1 und 2 – vollständiger Abnahmebericht](reviews/phase-1-2-acceptance.md), [Architektur](architecture/AS_IS.md), [neue Screenshots](screenshots/phase-1-2/). 55 Jest-Tests, 40 SQL-Assertions und zehn Browserfälle bestanden. Die nachfolgenden Angaben zu 49 Tests/neun Browserfällen dokumentieren die vorherige Iteration; sie sind kein aktueller Abschlussbericht. Der Freigabestopp bleibt erhalten.
+
 Stand: 16.10.2026 · Branch `feat/wyldo-adventure-design-review` · Basis `3234cff` (Designpaket auf `main`). [Draft-Pull-Request #1](https://github.com/carljust/wanderquest/pull/1) · **Designfreigabe ausstehend.** Dieser Bericht belegt den UI-Schritt, keine vollständige Produktabnahme.
 
 ## Verbindliche Grundlage und Umfang

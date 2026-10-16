@@ -4,7 +4,9 @@ Eine Outdoor-Abenteuer-App für iOS und Android mit Expo SDK 57, React Native, T
 
 **Version 0.2.1:** Gestaltung nach dem gelieferten Mockup, Wyldo in vier Posen, Externsteine-/Wasser-/Runa-/Schatzillustrationen, vier Steinsiegel und eine Fortschrittsansicht. Alle acht Stationen sind im Entwicklungsmodus spielbar. Web und Smartphone verwenden eine echte OSM-Grundkarte ohne Google-Maps-Key. „Mit Google anmelden“ ist implementiert und für einen eigenen Development Build vorbereitet; die tatsächliche Google-/Supabase-Konfiguration ist noch offen. Eine freigegebene Outdoor-Route und ein Character-Rig fehlen weiterhin. [Prüfstand und Screenshots](docs/verification.md).
 
-## Designreview – Phasen 1–3
+## Designreview – Phase 1 und 2
+
+Aktueller Auftrag: [Phase 1 und 2](docs/reviews/phase-1-2-request.md). [Bestand und Architektur](docs/architecture/AS_IS.md) · [Umsetzungsplan](docs/architecture/IMPLEMENTATION_BACKLOG.md) · [aktuelle Screenshots und Prüfergebnisse](docs/reviews/phase-1-2-acceptance.md). Ergänzt sind die Übungs-XP-/Levelanzeige im Header, Altersstatus, Startbereich, Abzeicheninformation und der gemeinsame sichere Kartenvertrag. **Die Nutzerfreigabe nach Phase 2 steht aus; spätere Phasen bleiben zurückgestellt.**
 
 Der Branch `feat/wyldo-adventure-design-review` enthält Entdecken im neuen hellen Naturdesign nach dem zuletzt übermittelten Chat-Mockup: überlappende Suche, Bildkarten, vier Filterchips und helle Hauptnavigation. [Aufbau und Screenshots](docs/reviews/discovery-layout.md). Questdetails und Karte/Richtung verwenden die Adventure-Referenz aus `docs/wyldo_codex_designpaket_v1/`. [Änderungen, tatsächliche Prüfungen und Screenshots](docs/design-review.md) · [Direkter Bildvergleich](docs/design-review.html). Der weitere Ausbau wartet auf Designfreigabe. Die Questdetails zeigen Dauer, Strecke und Rätsel-Schwierigkeit direkt unter dem Bild sowie eine Sterneübersicht mit Durchschnitt und Bewertungsanzahl. Der Entwurf hat aktuell null Bewertungen; Dauer und Strecke sind noch nicht bestätigt.
 

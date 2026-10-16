@@ -15,58 +15,47 @@ import { setStatusBarStyle } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { artwork, AtlasImage } from "./artwork";
 import { Icon, type IconName } from "./ui";
-import { levelProgress } from "@/domain/rewards";
+import { tokens } from "@/theme/tokens";
+import { PlayerProgress } from "./player-progress";
 
-export const adventure = {
-  gold: "#E5B94A",
-  goldEdge: "#BA9459",
-  cream: "#FFF9EF",
-  forest: "#10291E",
-  ink: "#233029",
-  forestPanel: "#173F32",
-  leaf: "#447D30",
-  leafLight: "#79AC45",
-  parchment: "#F8EFD9",
-  orange: "#DB6A24",
-  faded: "#D5DCCB",
-};
+export const adventure = tokens.adventure;
 export const gameStyles = StyleSheet.create({
   title: {
     color: adventure.cream,
     fontSize: 30,
     lineHeight: 36,
     fontWeight: "400",
-    fontFamily: "BreeSerif_400Regular",
+    fontFamily: tokens.font.display,
   },
   heading: {
     color: adventure.cream,
     fontSize: 23,
     lineHeight: 29,
     fontWeight: "400",
-    fontFamily: "BreeSerif_400Regular",
+    fontFamily: tokens.font.display,
   },
   body: {
     color: adventure.cream,
     fontSize: 16,
     lineHeight: 23,
-    fontFamily: "NunitoSans_400Regular",
+    fontFamily: tokens.font.body,
   },
   paperBody: {
     color: adventure.ink,
     fontSize: 16,
     lineHeight: 23,
-    fontFamily: "NunitoSans_400Regular",
+    fontFamily: tokens.font.body,
   },
   paperTitle: {
     color: adventure.ink,
     fontSize: 24,
     lineHeight: 30,
     fontWeight: "400",
-    fontFamily: "BreeSerif_400Regular",
+    fontFamily: tokens.font.display,
   },
   label: {
     color: adventure.gold,
-    fontFamily: "NunitoSans_700Bold",
+    fontFamily: tokens.font.strong,
     fontWeight: "700",
     fontSize: 12,
     letterSpacing: 0.7,
@@ -229,6 +218,7 @@ export function AdventurePanel({
 }
 export function AdventureButton({
   label,
+  shortLabel,
   onPress,
   variant = "green",
   icon,
@@ -236,6 +226,7 @@ export function AdventureButton({
   compact = false,
 }: {
   label: string;
+  shortLabel?: string;
   onPress: () => void;
   variant?: "green" | "paper" | "gold" | "rust" | "glass";
   icon?: IconName;
@@ -289,13 +280,13 @@ export function AdventureButton({
             minWidth: 0,
             fontSize: compact ? 14 : 17,
             lineHeight: compact ? 20 : 23,
-            fontFamily: "NunitoSans_700Bold",
+            fontFamily: tokens.font.strong,
             color: dark ? adventure.ink : adventure.cream,
             fontWeight: "700",
             textAlign: "center",
           }}
         >
-          {label}
+          {shortLabel ?? label}
         </Text>
       </LinearGradient>
     </Pressable>
@@ -369,36 +360,5 @@ export function XpMeter({
   xp: number;
   practice?: boolean;
 }) {
-  const level = levelProgress(xp);
-  return (
-    <View
-      accessibilityLabel={`${practice ? "Übungslevel" : "Level"} ${level.level}, ${level.current} von ${level.next} XP`}
-      style={{ gap: 4, minWidth: 84 }}
-    >
-      <Text style={{ color: adventure.cream, fontWeight: "700", fontSize: 16 }}>
-        {practice ? "Übung · " : ""}Lv. {level.level}
-      </Text>
-      <View
-        style={{
-          height: 7,
-          borderRadius: 5,
-          backgroundColor: "#16241E",
-          borderWidth: 1,
-          borderColor: adventure.goldEdge,
-          overflow: "hidden",
-        }}
-      >
-        <View
-          style={{
-            width: `${(level.current / level.next) * 100}%`,
-            height: "100%",
-            backgroundColor: adventure.gold,
-          }}
-        />
-      </View>
-      <Text style={{ color: adventure.cream, fontSize: 10 }}>
-        {level.current} / {level.next} XP
-      </Text>
-    </View>
-  );
+  return <PlayerProgress xp={xp} practice={practice} />;
 }

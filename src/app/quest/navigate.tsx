@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Pressable, Text, View, useWindowDimensions } from "react-native";
+import { Text, View, useWindowDimensions } from "react-native";
 import {
   AdventureButton,
   AdventurePanel,
@@ -8,8 +8,13 @@ import {
   adventure,
   gameStyles,
 } from "@/components/adventure-ui";
-import { DirectionCompass, JourneyHeader } from "@/components/journey-ui";
-import { WyldoCompanion } from "@/features/companion/wyldo-companion";
+import {
+  DirectionCompass,
+  JourneyHeader,
+  NavigationModeSwitch,
+  type NavigationMode,
+} from "@/components/journey-ui";
+import { WyldoMessage } from "@/components/wyldo-message";
 import { useQuest } from "@/features/quest/provider";
 import { useLocation } from "@/features/map/use-location";
 import { useHeading } from "@/features/map/use-heading";
@@ -24,7 +29,9 @@ import {
 export default function Navigate() {
   const q = useQuest();
   const params = useLocalSearchParams<{ mode?: string }>();
-  const [mode, setMode] = useState(params.mode === "map" ? "map" : "direction");
+  const [mode, setMode] = useState<NavigationMode>(
+    params.mode === "map" ? "map" : "direction",
+  );
   const [simDistance, setSimDistance] = useState(420);
   const [simHeading, setSimHeading] = useState(0);
   const [controls, setControls] = useState(false);
@@ -108,8 +115,15 @@ export default function Navigate() {
           <View style={{ flex: 1 }}>
             <AdventureButton
               label={mode === "map" ? "Richtungsmodus" : "Kartenmodus"}
+              shortLabel={
+                width < 480
+                  ? mode === "map"
+                    ? "Richtung"
+                    : "Karte"
+                  : undefined
+              }
               variant="glass"
-              compact={width < 360}
+              compact={width < 480}
               icon={mode === "map" ? "navigate" : "map-outline"}
               onPress={() => setMode(mode === "map" ? "direction" : "map")}
             />
@@ -118,7 +132,7 @@ export default function Navigate() {
             <AdventureButton
               label="Quest pausieren"
               variant="rust"
-              compact={width < 360}
+              compact={width < 480}
               icon="pause"
               onPress={() => {
                 gps.disable();
@@ -135,60 +149,54 @@ export default function Navigate() {
         station={station.order}
         step={unlocked ? 1 : 0}
       />
-      <View
-        accessibilityRole="tablist"
-        style={{
-          flexDirection: "row",
-          padding: 4,
-          borderRadius: 32,
-          borderWidth: 1.5,
-          borderColor: adventure.goldEdge,
-          backgroundColor: "#21332CCC",
-        }}
-      >
-        {[
-          ["map", "Karte"],
-          ["direction", "Richtung"],
-        ].map(([value, label]) => (
-          <Pressable
-            key={value}
-            accessibilityRole="tab"
-            accessibilityLabel={label}
-            accessibilityState={{ selected: mode === value }}
-            aria-selected={mode === value}
-            onPress={() => setMode(value)}
-            style={{
-              flex: 1,
-              minHeight: 50,
-              borderRadius: 28,
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: mode === value ? adventure.gold : "transparent",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 19,
-                fontWeight: "700",
-                color: mode === value ? adventure.ink : adventure.cream,
-              }}
-            >
-              {label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
+      <NavigationModeSwitch mode={mode} onChange={setMode} />
       {practice && (
         <Text style={[gameStyles.label, { textAlign: "center" }]}>
           GPS-SIMULATION · Ziel und Entfernung sind virtuell
         </Text>
       )}
-      <Text style={[gameStyles.heading, { textAlign: "center", fontSize: 20 }]}>
-        {station.order === 1 ? "Zum Startpunkt" : station.title}
-      </Text>
-      {compact && distanceDisplay}
+      {practice && mode === "map" && (
+        <Text style={[gameStyles.body, { fontSize: 12, lineHeight: 17 }]}>
+          Reale Orientierungskarte. Das virtuelle Simulationsziel wird hier
+          nicht eingezeichnet; die Questroute ist noch nicht freigegeben.
+        </Text>
+      )}
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+        <Text
+          style={[
+            gameStyles.heading,
+            { textAlign: "center", fontSize: 20, flex: 1 },
+          ]}
+        >
+          {station.order === 1 ? "Zum Startpunkt" : station.title}
+        </Text>
+        {mode === "map" && (
+          <Text
+            style={[
+              gameStyles.heading,
+              { color: adventure.gold, fontSize: 23 },
+            ]}
+          >
+            {reading.distance === undefined
+              ? "—"
+              : `${Math.round(reading.distance)} m`}
+          </Text>
+        )}
+      </View>
+      {mode === "map" && (
+        <Text style={[gameStyles.body, { fontSize: 12, textAlign: "center" }]}>
+          {practice
+            ? "Virtuelle Entfernung · keine reale Wegstrecke"
+            : "Luftlinie zum Ziel · auf den Wegen bleiben"}
+        </Text>
+      )}
+      {compact && mode === "direction" && distanceDisplay}
       {mode === "map" ? (
-        <QuestMap quest={q.quest} fix={practice ? undefined : gps.fix} />
+        <QuestMap
+          quest={q.quest}
+          fix={practice ? undefined : gps.fix}
+          targetStationId={practice ? undefined : station.id}
+        />
       ) : (
         <DirectionCompass
           bearing={reading.bearing}
@@ -198,7 +206,7 @@ export default function Navigate() {
           size={Math.min(240, width - 60, Math.max(180, height * 0.29))}
         />
       )}
-      {!compact && distanceDisplay}
+      {!compact && mode === "direction" && distanceDisplay}
       {Boolean(gps.error || compass.error || q.error) && (
         <AdventurePanel paper>
           <Text style={gameStyles.paperBody}>
@@ -220,23 +228,13 @@ export default function Navigate() {
         onPress={() => setTip(!tip)}
       />
       {tip && (
-        <AdventurePanel
-          paper
-          style={{ flexDirection: "row", alignItems: "center", padding: 10 }}
-        >
-          <WyldoCompanion
-            state="idle"
-            size={90}
-            reducedMotion={q.preferences.reducedMotion}
-          />
-          <Text style={[gameStyles.paperBody, { flex: 1 }]}>
-            {unlocked
-              ? "Diese Station bleibt freigeschaltet. Öffne ihre Aufgabe, wenn du bereit bist."
-              : reading.state === "arrived"
-                ? "Zielradius erkannt! Öffne die Spielansicht, um die Station freizuschalten. Es wird keine Aufgabe automatisch gelöst."
-                : reading.message}
-          </Text>
-        </AdventurePanel>
+        <WyldoMessage reducedMotion={q.preferences.reducedMotion}>
+          {unlocked
+            ? "Diese Station bleibt freigeschaltet. Öffne ihre Aufgabe, wenn du bereit bist."
+            : reading.state === "arrived"
+              ? "Zielradius erkannt! Öffne die Spielansicht, um die Station freizuschalten. Es wird keine Aufgabe automatisch gelöst."
+              : reading.message}
+        </WyldoMessage>
       )}
       {practice ? (
         <>

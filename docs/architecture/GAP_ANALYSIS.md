@@ -1,0 +1,25 @@
+# Lücken und Abweichungen
+
+Priorität **Muss** = für den jeweiligen Meilenstein nötig; **Soll** = sinnvolle Verbesserung. „Vorhanden“ bedeutet nicht automatisch live oder auf Geräten geprüft.
+
+| Prio / Phase | Anforderung                                  | Ausgangsstand und konkrete Lücke                                                   | Nachweis / Voraussetzung                                                                 |
+| ------------ | -------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Muss P1      | nachvollziehbare Architektur                 | Berichte vorhanden, vier explizite Architekturdokumente fehlten                    | Dokumente in diesem Ordner                                                               |
+| Muss P2      | zentrale Design-Tokens                       | Farben in Discovery/Adventure verteilt                                             | gemeinsamer Tokenvertrag, keine Abhängigkeit neu                                         |
+| Muss P2      | Entdecken mit Header-XP                      | Suche/Filter/Karte vorhanden; XP nur bei begonnenem Run darunter                   | Header mit ehrlicher Übungs-/Nichtverfügbaranzeige                                       |
+| Muss P2      | Questdetails vollständig                     | Alter/Startpunkt/Badge nicht klar zusammengeführt                                  | Metadaten und Startpunktpanel; keine ungeprüften Zahlen                                  |
+| Muss P2      | echte Karte, Ziel/Position/Track vorbereitet | zwei Leaflet-Renderer; generische Kreise, Route nicht zusätzlich freigabegefiltert | gemeinsame Datenprojektion, Quest-Pin, Standortpunkt/Genauigkeit, nur geprüfte Geometrie |
+| Muss P2      | Richtung und Wechsel                         | Peilung, Nordfallback, Simulation und Pause vorhanden                              | zusätzliche Tests für Kartenvertrag, Moduserhalt und unterschiedliche Zielpeilungen      |
+| Muss P2      | mobile Sichtprüfung                          | Androidähnliche und kleine Browsergrößen vorhanden                                 | auch iPhone-Größe; echte Screenshots, Abweichungen dokumentieren                         |
+| Muss P3      | Supabase/Google live                         | Code vorbereitet; Key und Provider fehlen                                          | sichere Umgebungsvariable, Provideradministration, Testkonto/Deep Links                  |
+| Muss P4/P8   | Outdoor-Freigabe                             | null Stationskoordinaten, keine geprüfte Route                                     | offizieller Track, acht sichere Ziele, Rechte/Zugangsregeln, Begehung                    |
+| Muss P5      | vollständiger Automat                        | bestehende Reihenfolge; Intro/Ankunft/Pause nicht eigener persistenter Zustand     | Maschine, Events, deterministisches Resume, Regressionstests                             |
+| Muss P6      | freigegebene acht Kapitel                    | spielbarer Schatzentwurf; Referenz-JSON enthält widersprechende Geschichte         | redaktionelle Abnahme von Dialogen, Rätseln und Medien                                   |
+| Muss P7      | reguläre XP/Level/Inventar                   | nur Übungs-XP-Vorschau, Siegel und Badgegrundlage                                  | abgestimmte Werte, transaktionales Ledger, Kontoprüfung                                  |
+| Muss P8      | Geräte-/Feldabnahme                          | Browser und Hermesexports                                                          | echte iOS/Android-GPS-, Sensor-, Keyboard-, Safe-Area- und Rückkehrtests                 |
+| Soll später  | Charakteranimation                           | vier originale PNG-Posen                                                           | getrennte Ebenen/Rig; kein vorgetäuschter Lip-Sync                                       |
+| Soll später  | Live-Sterneaggregate                         | lesender Datenvertrag vorhanden, null Bewertungen                                  | autorisierte Aggregation; keine Bewertungsabgabe in diesem Auftrag                       |
+| Soll später  | Katalog und Nähe                             | ein Questdokument, Regionssuche                                                    | veröffentlichte Standorte, Katalogabfrage, Einwilligung/Distanzsortierung                |
+| Soll später  | Offlinekarten                                | nur Questmediencache                                                               | Anbieter/Lizenz mit erlaubtem Offlinepaket; OSM-Tiles nicht massenladen                  |
+
+Offene Entscheidungen: Kinder-/Elternkonto, exakte Rewardökonomie, Medienrechte und spätere Kartenlast. Keine davon blockiert die Phase-2-UI; sie blockieren eine ehrliche Go-live-Freigabe. Keine weiteren Spielphasen beginnen, bevor der Nutzer das konkrete Design freigegeben hat.

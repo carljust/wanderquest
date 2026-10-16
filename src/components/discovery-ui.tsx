@@ -9,40 +9,31 @@ import {
 } from "react-native";
 import { Icon, type IconName } from "./ui";
 import { Scene } from "./artwork";
+import { tokens } from "@/theme/tokens";
 
-export const discovery = {
-  background: "#F5F3E9",
-  paper: "#FFFCF5",
-  green: "#315E38",
-  deep: "#0E3528",
-  ink: "#233C2D",
-  muted: "#647063",
-  border: "#E2E3D8",
-  accent: "#8DAE49",
-  gold: "#E9B44A",
-};
+export const discovery = tokens.discovery;
 export const discoverStyles = StyleSheet.create({
   title: {
     color: discovery.deep,
-    fontFamily: "NunitoSans_700Bold",
+    fontFamily: tokens.font.strong,
     fontSize: 25,
     lineHeight: 30,
   },
   body: {
     color: discovery.ink,
-    fontFamily: "NunitoSans_400Regular",
+    fontFamily: tokens.font.body,
     fontSize: 15,
     lineHeight: 21,
   },
   caption: {
     color: discovery.muted,
-    fontFamily: "NunitoSans_400Regular",
+    fontFamily: tokens.font.body,
     fontSize: 12,
     lineHeight: 17,
   },
   card: {
     backgroundColor: discovery.paper,
-    borderRadius: 22,
+    borderRadius: tokens.radius.card,
     borderWidth: 1,
     borderColor: discovery.border,
     overflow: "hidden",
@@ -81,7 +72,7 @@ export function DiscoveryAction({
       onPress={onPress}
       style={({ pressed }) => ({
         opacity: disabled ? 0.45 : pressed ? 0.75 : 1,
-        minHeight: 48,
+        minHeight: tokens.touch.minimum,
         borderRadius: 26,
         backgroundColor: secondary ? discovery.paper : discovery.green,
         borderWidth: 1,
@@ -96,7 +87,7 @@ export function DiscoveryAction({
     >
       <Text
         style={{
-          fontFamily: "NunitoSans_700Bold",
+          fontFamily: tokens.font.strong,
           fontSize: 15,
           lineHeight: 21,
           flexShrink: 1,
@@ -209,7 +200,7 @@ export function DiscoveryShortcut({
             fontSize: 17,
             lineHeight: 21,
             color: discovery.deep,
-            fontFamily: "NunitoSans_700Bold",
+            fontFamily: tokens.font.strong,
           }}
         >
           {title}

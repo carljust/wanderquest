@@ -12,25 +12,28 @@ import { LinearGradient } from "expo-linear-gradient";
 import { WyldoCompanion } from "@/features/companion/wyldo-companion";
 import { discovery, discoverStyles } from "./discovery-ui";
 import { Icon } from "./ui";
+import { PlayerProgress } from "./player-progress";
 export function DiscoveryHero({
   search,
   onSearch,
   onFilters,
   onSettings,
   reducedMotion,
+  practiceXp,
 }: {
   search: string;
   onSearch: (text: string) => void;
   onFilters: () => void;
   onSettings: () => void;
   reducedMotion: boolean;
+  practiceXp?: number;
 }) {
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   return (
     <View
       style={{
-        height: Math.min(285, Math.max(238, width * 0.68)) + insets.top,
+        height: Math.min(317, Math.max(292, width * 0.68 + 32)) + insets.top,
         zIndex: 2,
       }}
     >
@@ -96,6 +99,28 @@ export function DiscoveryHero({
         <Icon name="settings-outline" color={discovery.green} size={21} />
       </Pressable>
       <View
+        testID="discovery-player-hud"
+        style={{
+          position: "absolute",
+          top: insets.top + 112,
+          left: 17,
+          width: 141,
+          borderRadius: 12,
+          borderWidth: 1,
+          borderColor: "#D4BE81",
+          paddingHorizontal: 10,
+          paddingVertical: 6,
+          backgroundColor: "#FFFCF5F0",
+        }}
+      >
+        <PlayerProgress
+          xp={practiceXp}
+          practice={practiceXp !== undefined}
+          light
+        />
+      </View>
+      <View
+        testID="discovery-greeting"
         style={{
           position: "absolute",
           left: 17,
@@ -153,7 +178,7 @@ export function DiscoveryHero({
         <Icon name="search-outline" size={24} color={discovery.muted} />
         <TextInput
           accessibilityLabel="Quests suchen"
-          placeholder="Suche nach Quests"
+          placeholder="Quests oder Orte suchen"
           placeholderTextColor="#777D72"
           value={search}
           onChangeText={onSearch}

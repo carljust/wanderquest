@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { View } from "react-native";
-import type { Quest, Fix } from "@/domain/quest";
 import { Button, Notice } from "@/components/ui";
 import "leaflet/dist/leaflet.css";
 import "./quest-map.css";
-import { orientationPoints } from "./references";
+import { mapPayload, type QuestMapProps } from "./map-model";
+import { questPinSvg } from "./quest-pin";
 
 // Native resolves quest-map.native. No tile download or speculative route.
-export function QuestMap(props: { quest: Quest | null; fix?: Fix }) {
+export function QuestMap(props: QuestMapProps) {
   const [attempt, setAttempt] = useState(0);
   return (
     <View style={{ gap: 12 }}>
@@ -21,7 +21,7 @@ export function QuestMap(props: { quest: Quest | null; fix?: Fix }) {
     </View>
   );
 }
-function WebMap({ quest, fix }: { quest: Quest | null; fix?: Fix }) {
+function WebMap({ quest, fix, targetStationId }: QuestMapProps) {
   const container = useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<import("leaflet").Map | null>(null);
   const [error, setError] = useState("");
@@ -62,7 +62,8 @@ function WebMap({ quest, fix }: { quest: Quest | null; fix?: Fix }) {
           if (alive) setLoading(false);
         });
         tiles.addTo(instance);
-        for (const point of orientationPoints) {
+        const data = mapPayload(quest, undefined, targetStationId);
+        for (const point of data.references) {
           const label = document.createElement("span");
           label.textContent =
             point.name + " · OSM-Orientierungspunkt, keine Queststation";
@@ -75,23 +76,32 @@ function WebMap({ quest, fix }: { quest: Quest | null; fix?: Fix }) {
             .addTo(instance)
             .bindTooltip(label);
         }
-        for (const station of quest?.stations ?? []) {
-          if (station.point && station.coordinateStatus !== "unverified") {
-            const label = document.createElement("span");
-            label.textContent = `${station.order}. ${station.title}`;
-            L.circleMarker([station.point.latitude, station.point.longitude], {
-              radius: 9,
-              color: "#183D32",
-            })
-              .addTo(instance)
-              .bindTooltip(label);
-          }
+        for (const station of data.stations) {
+          const label = document.createElement("span");
+          const selected = station.id === data.target?.id;
+          label.textContent = `${selected ? "Dein Ziel · " : ""}${station.order}. ${station.title}`;
+          L.marker([station.point.latitude, station.point.longitude], {
+            icon: L.divIcon({
+              html: questPinSvg(station.order, selected),
+              className: "wyldo-quest-pin",
+              iconSize: [44, 52],
+              iconAnchor: [22, 50],
+            }),
+            title: label.textContent,
+          })
+            .addTo(instance)
+            .bindTooltip(label);
         }
-        if (quest && quest.route.length > 1)
+        if (data.route.length > 1)
           L.polyline(
-            quest.route.map((p) => [p.latitude, p.longitude]),
-            { color: "#CB542C", weight: 4 },
+            data.route.map((p) => [p.latitude, p.longitude]),
+            { color: "#D2B278", weight: 5 },
           ).addTo(instance);
+        if (data.target)
+          instance.panTo([
+            data.target.point.latitude,
+            data.target.point.longitude,
+          ]);
         setMap(instance);
       })
       .catch(() => {
@@ -109,23 +119,35 @@ function WebMap({ quest, fix }: { quest: Quest | null; fix?: Fix }) {
       instance?.remove();
       setMap(null);
     };
-  }, [quest]);
+  }, [quest, targetStationId]);
   useEffect(() => {
-    if (!map || !fix) return;
+    const position = mapPayload(null, fix).fix;
+    if (!map || !position) return;
     let alive = true;
     let circle: import("leaflet").Circle | undefined;
+    let marker: import("leaflet").CircleMarker | undefined;
     void import("leaflet").then((L) => {
-      if (alive && Number.isFinite(fix.accuracy))
-        circle = L.circle([fix.latitude, fix.longitude], {
-          radius: fix.accuracy,
+      if (alive) {
+        circle = L.circle([position.latitude, position.longitude], {
+          radius: Math.min(1000, position.accuracy),
           color: "#2A6DD5",
+          weight: 1,
+        }).addTo(map);
+        marker = L.circleMarker([position.latitude, position.longitude], {
+          radius: 7,
+          color: "#FFFFFF",
+          weight: 3,
+          fillColor: "#2A6DD5",
+          fillOpacity: 1,
         })
           .addTo(map)
           .bindTooltip("Dein Standort");
+      }
     });
     return () => {
       alive = false;
       circle?.remove();
+      marker?.remove();
     };
   }, [map, fix]);
   return (

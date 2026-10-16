@@ -86,6 +86,7 @@ export default function Home() {
           onFilters={() => openFilters("all")}
           onSettings={() => router.push("/profile")}
           reducedMotion={q.preferences.reducedMotion}
+          practiceXp={auth.practice ? level.xp : undefined}
         />
         <View
           style={{

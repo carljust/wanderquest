@@ -1,6 +1,8 @@
-# Wyldo – Plan für die Designfreigabe (Phasen 1–3)
+# Wyldo – Plan für die Designfreigabe (Phase 1 und 2)
 
-Der zuletzt als „Entwicklungsauftrag: Wyldo MVP – Design und Spielerlebnis“ übermittelte Auftrag begrenzt diesen Schritt auf Analyse, Designsystem, Entdecken, Questdetails und die Navigationsoberfläche. **Nach der Sichtprüfung in Phase 3 anhalten und auf Freigabe warten.** Der weitere Ausbau von Quest-Engine, Supabase, XP und Rucksack erfolgt erst danach. Bereits vorhandene Spielfunktionen bleiben erhalten.
+Der aktuelle [Auftrag für Phase 1 und 2](reviews/phase-1-2-request.md) ist maßgeblich: Bestandsaufnahme und drei Hauptmasken, danach **Stopp für die Designfreigabe**. Weitere Quest-Engine-, Supabase-, XP- und Rucksackarbeit erfolgt erst danach. Vorhandene Funktionen bleiben erhalten.
+
+Aktuelle Architekturunterlagen: [AS_IS](architecture/AS_IS.md), [TARGET](architecture/TARGET.md), [GAP_ANALYSIS](architecture/GAP_ANALYSIS.md), [IMPLEMENTATION_BACKLOG](architecture/IMPLEMENTATION_BACKLOG.md). Konkrete Änderungen, Prüfungen und neue Screenshots: [Phase-1/2-Abnahmebericht](reviews/phase-1-2-acceptance.md). Die folgende Analyse beschreibt zusätzlich die vorherigen Designiterationen; deren alte Phasennummerierung ist historisch.
 
 ## Unterlagen und Bestand
 

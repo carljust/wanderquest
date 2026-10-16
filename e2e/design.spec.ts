@@ -34,6 +34,10 @@ test("discovery search, filters and bookmarks remain usable on a small screen", 
 }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await practice(page);
+  await expect(page.getByText("Übung · Lv. 1", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("0 / 600 XP · Vorschau", { exact: true }),
+  ).toBeVisible();
   await shot(page, "01-discover");
   await page
     .getByLabel("Quests suchen", { exact: true })
@@ -73,7 +77,18 @@ test("discovery search, filters and bookmarks remain usable on a small screen", 
     page.getByText("Noch keine Bewertungen", { exact: true }),
   ).toBeVisible();
   await expect(page.getByText("0 Bewertungen", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Altersempfehlung: noch nicht bestätigt", { exact: true }),
+  ).toBeVisible();
   await shot(page, "02-quest-details");
+  await page
+    .getByText("Dein Startpunkt", { exact: true })
+    .scrollIntoViewIfNeeded();
+  await expect(page.getByText(/Vorgeschlagener Ausgangsbereich/)).toBeVisible();
+  await page
+    .getByText("Hüter der Externsteine", { exact: true })
+    .scrollIntoViewIfNeeded();
+  await shot(page, "02-quest-rewards", false);
   await page.setViewportSize({ width: 320, height: 640 });
   await shot(page, "02-quest-details-small");
   await expect(
@@ -118,6 +133,18 @@ test("discovery search, filters and bookmarks remain usable on a small screen", 
   expect(tagline).not.toBeNull();
   expect(greeting).not.toBeNull();
   expect(tagline!.y + tagline!.height).toBeLessThanOrEqual(greeting!.y);
+  const progress = await page.getByTestId("discovery-player-hud").boundingBox();
+  const greetingPanel = await page
+    .getByTestId("discovery-greeting")
+    .boundingBox();
+  expect(progress!.y).toBeGreaterThanOrEqual(tagline!.y + tagline!.height);
+  expect(progress!.y + progress!.height).toBeLessThanOrEqual(greetingPanel!.y);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await shot(page, "01-discover-iphone");
+  await page
+    .getByRole("button", { name: "Abenteuer entdecken", exact: true })
+    .click();
+  await shot(page, "02-quest-details-iphone");
 });
 
 test("overview facets, chapter shortcut and offline download work with honest metadata", async ({
@@ -199,11 +226,15 @@ test("direction and map switch, virtual distance and pause preserve the existing
     timeout: 15000,
   });
   await expect(page.getByText("Karte wird geladen …")).toHaveCount(0);
+  await expect(page.getByText("420 m", { exact: true })).toBeInViewport();
   await shot(page, "03-navigation-map");
   await page.getByRole("tab", { name: "Richtung", exact: true }).click();
   await expect(page.getByText("420 m", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Simulation anpassen" }).click();
   await page.getByRole("button", { name: "100 m näher simulieren" }).click();
+  await expect(page.getByText("320 m", { exact: true })).toBeVisible();
+  await page.getByRole("tab", { name: "Karte", exact: true }).click();
+  await page.getByRole("tab", { name: "Richtung", exact: true }).click();
   await expect(page.getByText("320 m", { exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "Gerät um 45° drehen (Simulation)" })
