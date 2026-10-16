@@ -68,6 +68,7 @@ type QuestContext = Snapshot & {
   recover: () => Promise<void>;
   setPreferences: (preferences: Preferences) => Promise<void>;
   clearError: () => void;
+  toggleSaved: (questId: string) => Promise<void>;
 };
 const Context = createContext<QuestContext | null>(null);
 export function QuestProvider({ children }: PropsWithChildren) {
@@ -267,6 +268,16 @@ function QuestSessionProvider({
         notice,
         sync,
         clearError: () => setError(""),
+        toggleSaved: (id) =>
+          serial(async () => {
+            const saved = state.current.savedQuestIds;
+            await persist({
+              ...state.current,
+              savedQuestIds: saved.includes(id)
+                ? saved.filter((value) => value !== id)
+                : [...saved, id],
+            });
+          }),
         refresh: () =>
           serial(async () => {
             if (state.current.outbox.length)
@@ -436,7 +447,11 @@ function QuestSessionProvider({
               throw new Error(
                 "Nur der Übungslauf lässt sich hier zurücksetzen.",
               );
-            await persist({ ...state.current, run: null, outbox: [] });
+            await persist({
+              ...state.current,
+              run: null,
+              outbox: [],
+            });
             setNotice("Übungslauf zurückgesetzt.");
           }),
         setPreferences: (preferences) =>

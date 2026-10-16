@@ -1,8 +1,12 @@
 {
   "createdAt": "2026-10-16",
-  "reference": "User supplied four Wyldo poses and approved ten-screen mockup",
+  "reference": "docs/wyldo_codex_designpaket_v1: approved mockups 01–03 and original_fuchs_vier_posen.png, received on main 3234cff",
   "wyldo-poses.png": "AI-assisted preparation of the supplied fox reference as four whole-image poses; not a layered character rig.",
   "quest-scenes.png": "Supplementary generated illustrations matching the mockup; not documentary photographs, route evidence or physical treasure locations.",
   "stone-seals.png": "Supplementary generated digital sandstone seals: courage spiral, curiosity leaf, listening water, togetherness paths.",
-  "../icon.png": "Generated Wyldo portrait derived from the supplied fox identity."
+  "../icon.png": "Generated Wyldo portrait derived from the supplied fox identity.",
+  "wyldo-original-poses.png": "Unmodified copy of the user-supplied original_fuchs_vier_posen.png (2048×682 RGBA). Whole poses are selected through clipped React Native viewports; no facial layers or character rig.",
+  "adventure-forest.png": "Supplementary generated forest/rock illustration guided by the approved adventure mockups. No embedded UI text, no documentary photo and no route evidence.",
+  "game-atlas.png": "Supplementary generated wooden Wyldo wordmark, decorative medal, fantasy map and blank parchment. The fantasy map/medal do not represent a checked hiking route or a granted player reward. Only wordmark and blank paper are used in phase 2.",
+  "fonts": "Bree Serif Regular and Nunito Sans Regular/SemiBold/Bold, bundled via @expo-google-fonts. OFL licenses preserved in assets/licenses/."
 }

@@ -4,6 +4,14 @@ Eine Outdoor-Abenteuer-App für iOS und Android mit Expo SDK 57, React Native, T
 
 **Version 0.2.1:** Gestaltung nach dem gelieferten Mockup, Wyldo in vier Posen, Externsteine-/Wasser-/Runa-/Schatzillustrationen, vier Steinsiegel und eine Fortschrittsansicht. Alle acht Stationen sind im Entwicklungsmodus spielbar. Web und Smartphone verwenden eine echte OSM-Grundkarte ohne Google-Maps-Key. „Mit Google anmelden“ ist implementiert und für einen eigenen Development Build vorbereitet; die tatsächliche Google-/Supabase-Konfiguration ist noch offen. Eine freigegebene Outdoor-Route und ein Character-Rig fehlen weiterhin. [Prüfstand und Screenshots](docs/verification.md).
 
+## Designreview – Phasen 1–3
+
+Der Branch `feat/wyldo-adventure-design-review` enthält das neue Designsystem, Entdecken mit Suche/Filtern/Merkliste, Questdetails und Karte/Richtung nach `docs/wyldo_codex_designpaket_v1/`. [Änderungen, tatsächliche Prüfungen und Screenshots](docs/design-review.md) · [Direkter Bildvergleich](docs/design-review.html). Der weitere Ausbau wartet auf Designfreigabe.
+
+Zum Prüfen dieses Standes im vorhandenen Checkout: eigene lokale Änderungen vorher sichern, `git fetch origin`, dann `git switch --track origin/feat/wyldo-adventure-design-review` (oder den bereits vorhandenen lokalen Branch mit `git switch feat/wyldo-adventure-design-review` öffnen). Danach `npm ci --include=dev` und `npm run start:phone`. Den nachfolgenden Main-Pull beim Branchreview auslassen.
+
+Im Übungsmodus lautet der Einstieg jetzt **„Abenteuer entdecken“ → „Zum Startpunkt navigieren“**. Karte und Richtung sind umschaltbar; die klar beschriftete Simulation verändert nur die Vorschau. **„Zur Spielansicht“** öffnet den vorhandenen spielbaren Acht-Stationen-Ablauf mit „Ankunft simulieren“. „Quest pausieren“ kehrt zu Entdecken zurück; der bestehende Spielstand bleibt erhalten. Automatische Ankunft/Begrüßung und reguläres XP-System folgen erst nach Freigabe.
+
 ## Schnellstart in Codespaces oder auf dem Mac
 
 Node **24.3–24.x** (Version in `.nvmrc`) und npm 11. In Codespaces braucht dein Mac kein Node: alle folgenden Befehle laufen im Codespaces-Terminal.
@@ -20,7 +28,7 @@ Auf dem Mac stattdessen in den lokalen Repositoryordner wechseln. Expo Go muss S
 
 Falls `git pull` wegen eines lokal veränderten `package-lock.json` stoppt: die eigene Änderung zuerst sichern, etwa mit `git stash push -m "Lokales Lockfile vor Wyldo-Update" -- package-lock.json`, und dann erneut aktualisieren. Das aktuelle Projekt immer mit `npm ci` installieren.
 
-Auf der Anmeldung **„Ohne Konto im Entwicklungsmodus testen“**, danach **„Abenteuer entdecken“ → „Übungsabenteuer starten“** wählen. An jeder Station ersetzt **„Ankunft simulieren“** den Aufenthalt vor Ort. Rätsel, zwei Hinweise je Aufgabe, vier Siegel und Finale lassen sich durchspielen. Im Profil kannst du den Lauf zurücksetzen. Bei einem echten angemeldeten Konto führt **„Quest im Übungsmodus öffnen“** ebenfalls zum Testlauf, falls noch keine Live-Quest freigegeben ist. Übung und Konto bleiben getrennt; simulierte Läufe erhalten kein reguläres Abzeichen.
+Auf der Anmeldung **„Ohne Konto im Entwicklungsmodus testen“**, danach die Questdetails öffnen (auf dem Designreview-Branch den oben beschriebenen Navigationseinstieg nutzen). An jeder Station ersetzt **„Ankunft simulieren“** den Aufenthalt vor Ort. Rätsel, zwei Hinweise je Aufgabe, vier Siegel und Finale lassen sich durchspielen. Im Profil kannst du den Lauf zurücksetzen. Bei einem echten angemeldeten Konto führt **„Quest im Übungsmodus öffnen“** ebenfalls zum Testlauf, falls noch keine Live-Quest freigegeben ist. Übung und Konto bleiben getrennt; simulierte Läufe erhalten kein reguläres Abzeichen.
 
 Lokal im selben WLAN geht auch `npm start -- --go`. Browser: `npm run web`.
 

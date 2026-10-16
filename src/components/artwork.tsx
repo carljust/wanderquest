@@ -12,6 +12,11 @@ export const artwork = {
     require("../../assets/design/quest-scenes.png") as ImageSourcePropType,
   fox: require("../../assets/design/wyldo-poses.png") as ImageSourcePropType,
   seals: require("../../assets/design/stone-seals.png") as ImageSourcePropType,
+  forest:
+    require("../../assets/design/adventure-forest.png") as ImageSourcePropType,
+  game: require("../../assets/design/game-atlas.png") as ImageSourcePropType,
+  foxOriginal:
+    require("../../assets/design/wyldo-original-poses.png") as ImageSourcePropType,
 };
 // Render a cell of the supplied/prepared atlas without changing the original file.
 export function AtlasImage({
@@ -76,13 +81,44 @@ export function FoxPose({
   pose?: number;
   size?: number;
 }) {
+  // Midpoints of transparent gaps in the supplied 2048×682 master sheet.
+  // Each viewport clips one whole pose; the original pixels stay untouched.
+  const bounds = [
+    [0, 486],
+    [486, 538],
+    [1024, 518],
+    [1542, 506],
+  ][Math.max(0, Math.min(3, pose))];
+  const scale = Math.min(size / bounds[1], size / 682);
   return (
-    <AtlasImage
-      source={artwork.fox}
-      index={pose}
-      style={{ width: size, height: size }}
-      label="Wyldo mit grünem Schal, Rucksack und Kompass"
-      contain
-    />
+    <View
+      accessibilityLabel="Wyldo mit grünem Schal, Rucksack und Kompass"
+      style={{
+        width: size,
+        height: size,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <View
+        style={{
+          width: bounds[1] * scale,
+          height: 682 * scale,
+          overflow: "hidden",
+        }}
+      >
+        <Image
+          source={artwork.foxOriginal}
+          resizeMode="stretch"
+          style={{
+            position: "absolute",
+            width: 2048 * scale,
+            height: 682 * scale,
+            left: -bounds[0] * scale,
+            top: 0,
+          }}
+        />
+      </View>
+    </View>
   );
 }

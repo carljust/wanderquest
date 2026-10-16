@@ -2,7 +2,7 @@ import { Redirect, Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon, LoadingState } from "@/components/ui";
 import { useAuth } from "@/features/auth/provider";
-import { colors } from "@/theme";
+import { adventure } from "@/components/adventure-ui";
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const auth = useAuth();
@@ -12,11 +12,11 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.forest,
-        tabBarInactiveTintColor: colors.muted,
+        tabBarActiveTintColor: adventure.gold,
+        tabBarInactiveTintColor: "#DDD9BD",
         tabBarStyle: {
-          backgroundColor: colors.background,
-          borderTopColor: colors.line,
+          backgroundColor: adventure.forest,
+          borderTopColor: adventure.goldEdge,
           height: 68 + insets.bottom,
           paddingBottom: insets.bottom + 8,
           paddingTop: 8,
@@ -34,19 +34,19 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="missions"
-        options={{
-          title: "Abenteuer",
-          tabBarIcon: ({ color }) => (
-            <Icon name="trail-sign-outline" color={color} />
-          ),
-        }}
-      ></Tabs.Screen>
-      <Tabs.Screen
         name="map"
         options={{
           title: "Karte",
           tabBarIcon: ({ color }) => <Icon name="map-outline" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="missions"
+        options={{
+          title: "Rucksack",
+          tabBarIcon: ({ color }) => (
+            <Icon name="bag-handle-outline" color={color} />
+          ),
         }}
       />
       <Tabs.Screen

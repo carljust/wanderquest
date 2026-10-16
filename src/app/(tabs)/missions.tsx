@@ -9,8 +9,10 @@ export default function Adventures() {
   const q = useQuest();
   return (
     <Screen>
-      <Text style={layout.eyebrow}>DEINE GESCHICHTEN DRAUSSEN</Text>
-      <Text style={layout.title}>Abenteuer</Text>
+      <Text style={layout.eyebrow}>
+        DEIN AKTUELLES ABENTEUER UND DEINE SIEGEL
+      </Text>
+      <Text style={layout.title}>Rucksack</Text>
       <QuestStatus />
       <PracticeEntry />
       {q.loading ? (

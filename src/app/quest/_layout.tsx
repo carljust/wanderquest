@@ -32,6 +32,10 @@ export default function QuestLayout() {
         name="progress"
         options={{ title: "Dein Fortschritt", headerShown: false }}
       />
+      <Stack.Screen
+        name="navigate"
+        options={{ title: "Navigation", headerShown: false }}
+      />
     </Stack>
   );
 }

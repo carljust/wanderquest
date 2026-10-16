@@ -22,6 +22,23 @@ const op = (id: string, stationId = quest.stations[0].id): Operation => ({
   createdAt: 1,
 });
 describe("offline persistence and replay", () => {
+  test("legacy snapshots acquire an empty bookmark list without losing progress", async () => {
+    const { savedQuestIds: _unused, ...legacy } = { ...emptySnapshot(), run };
+    await AsyncStorage.setItem("wyldo.v1.legacy", JSON.stringify(legacy));
+    const restored = await readSnapshot("legacy");
+    expect(restored.savedQuestIds).toEqual([]);
+    expect(restored.run).toEqual(run);
+  });
+  test("bookmarks survive restart and remain account-separated", async () => {
+    await saveSnapshot("bookmark-owner", {
+      ...emptySnapshot(),
+      savedQuestIds: [quest.id],
+    });
+    expect((await readSnapshot("bookmark-owner")).savedQuestIds).toEqual([
+      quest.id,
+    ]);
+    expect((await readSnapshot("bookmark-other")).savedQuestIds).toEqual([]);
+  });
   test("restart restores the full run and its queue atomically in its account partition", async () => {
     const snapshot = {
       ...emptySnapshot(),
