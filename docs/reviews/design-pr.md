@@ -1,5 +1,7 @@
 # Wyldo · Phase 1 und 2: Hauptmasken zur Designfreigabe
 
+Nachfolgende Fehlerkorrektur: Der gemeldete native `AudioPlayer.pause`-Fehler wurde anhand der Expo-Freigabereihenfolge reproduziert. Text/TTS benötigen jetzt keinen leeren Player; echte Aufnahmen werden bei Skip, Stumm und Verlassen einmalig freigegeben. Aktuell 62 Jest-Tests bestanden; vier App-E2E-Fälle und native Exports nach dem Audiofix erneut geprüft. [Fehlernachweis](https://github.com/carljust/wanderquest/blob/feat/wyldo-adventure-design-review/docs/reviews/audio-startup-fix.md).
+
 Die drei Hauptmasken werden an die freigegebenen Referenzen angepasst: Entdecken folgt der jüngsten hellen Naturkomposition mit Original-Wyldo, überlappender Suche, Bildkarten und vier Tabs. Questdetails und Navigation behalten die Wald-/Goldgestaltung. Suche nach Titel/Region, Filter, Merkliste, Download, Fortsetzung und der vorhandene Acht-Stationen-Übungsablauf bleiben nutzbar.
 
 Der aktuelle Auftrag ergänzt vier Architekturdokumente, zentrale Design-Tokens, eine gekennzeichnete XP-/Levelvorschau im Header und sichtbaren Altersstatus, Startbereich und Abschlussabzeichen in den Details. Karten-/Richtungswechsel ist eine wiederverwendbare Komponente. Browser und WebView teilen den Datenvertrag für freigegebene Ziele/Wege und gültiges GPS; ungeprüfte Geometrie wird nicht als Route angezeigt. Distanz bleibt auch im Kartenmodus sichtbar.

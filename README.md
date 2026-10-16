@@ -6,6 +6,8 @@ Eine Outdoor-Abenteuer-App für iOS und Android mit Expo SDK 57, React Native, T
 
 ## Designreview – Phase 1 und 2
 
+Der gemeldete Fehler `AudioPlayer.pause has been rejected` ist im Dialog-Lebenszyklus korrigiert. [Ursache, Tests und Aktualisierung](docs/reviews/audio-startup-fix.md). Der Fix liegt auf dem nachfolgend genannten Review-Branch.
+
 Aktueller Auftrag: [Phase 1 und 2](docs/reviews/phase-1-2-request.md). [Bestand und Architektur](docs/architecture/AS_IS.md) · [Umsetzungsplan](docs/architecture/IMPLEMENTATION_BACKLOG.md) · [aktuelle Screenshots und Prüfergebnisse](docs/reviews/phase-1-2-acceptance.md). Ergänzt sind die Übungs-XP-/Levelanzeige im Header, Altersstatus, Startbereich, Abzeicheninformation und der gemeinsame sichere Kartenvertrag. **Die Nutzerfreigabe nach Phase 2 steht aus; spätere Phasen bleiben zurückgestellt.**
 
 Der Branch `feat/wyldo-adventure-design-review` enthält Entdecken im neuen hellen Naturdesign nach dem zuletzt übermittelten Chat-Mockup: überlappende Suche, Bildkarten, vier Filterchips und helle Hauptnavigation. [Aufbau und Screenshots](docs/reviews/discovery-layout.md). Questdetails und Karte/Richtung verwenden die Adventure-Referenz aus `docs/wyldo_codex_designpaket_v1/`. [Änderungen, tatsächliche Prüfungen und Screenshots](docs/design-review.md) · [Direkter Bildvergleich](docs/design-review.html). Der weitere Ausbau wartet auf Designfreigabe. Die Questdetails zeigen Dauer, Strecke und Rätsel-Schwierigkeit direkt unter dem Bild sowie eine Sterneübersicht mit Durchschnitt und Bewertungsanzahl. Der Entwurf hat aktuell null Bewertungen; Dauer und Strecke sind noch nicht bestätigt.
