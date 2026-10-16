@@ -51,6 +51,8 @@ export type Quest = {
   duration: string;
   distance: string;
   difficulty: string;
+  // Read-only aggregate supplied by the quest data source; no player reviews here.
+  ratingSummary?: { average: number | null; count: number };
   preparation: string[];
   start: string;
   approval: "pending_source_review" | "approved";

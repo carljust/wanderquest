@@ -30,3 +30,11 @@ Das gelieferte Mockup und die Charakterreferenz sind inzwischen berücksichtigt.
 Der aktuelle Generator setzt absichtlich `draft`, `pending_source_review`, `field_ready=false` und keine Koordinaten. Er ist für den vorhandenen Entwurf bestimmt und **kein Freigabewerkzeug**. Die spätere freigegebene Version braucht eine eigene Datenmigration, die normalisierte Stationskoordinaten und das öffentliche Dokument konsistent einfügt, Lösungen/Feedback privat ablegt und erst zum Schluss veröffentlicht. Ein bloßes Umschalten von `status` wäre keine fachliche Freigabe. Die App und Startfunktion blockieren unvollständig freigegebene Daten.
 
 Vor Produktivbetrieb echte Registrierung, Bestätigung, Login, Recovery-Link und Logout auf beiden Plattformen prüfen; SMTP-/Rate-Limits sowie Datenschutzkontakt und Kontolöschprozess einrichten. Diese administrativen Schritte sind noch offen.
+
+## Questangaben und Sterneübersicht
+
+Die Detailansicht liest `duration`, `distance` und `difficulty` unmittelbar aus den zentralen Questdaten. Unvermessene Angaben bleiben unvermessen; Mockup-Minuten und Kilometer werden nicht als geprüfte Route ausgegeben. Die Schwierigkeit des aktuellen Entwurfs beschreibt die Rätsel, nicht das Gelände.
+
+Die reine Sterneanzeige liest das optionale `ratingSummary` im Questdokument: `{ "average": null, "count": 0 }` bedeutet ausdrücklich noch keine Bewertungen, mit leeren Sternen und ohne erfundenen Durchschnitt. Bei vorhandenen echten Daten werden `average` (1–5) und ganzzahliges positives `count` deutsch formatiert angezeigt. Fehlende oder ungültige Daten erscheinen als nicht verfügbar. Die Beispielquest und ihr wiederholbarer Seed enthalten null Bewertungen.
+
+Diese Ergänzung enthält wie gewünscht **keine Eingabe eigener Sterne**, keine Bewertungstabelle und keine automatische Live-Aggregation von Spielerrezensionen. Solange keine echten Bewertungsdaten bereitgestellt werden, bleibt die Anzeige leer. Es wurden keine Remote-Daten verändert. Ein späteres Bewertungsbackend sollte eigene veränderliche Aggregate liefern, statt veröffentlichte Storyversionen für jeden neuen Stern zu ändern.

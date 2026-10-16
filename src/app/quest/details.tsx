@@ -16,6 +16,7 @@ import { Scene } from "@/components/artwork";
 import { PracticeEntry } from "@/components/practice-entry";
 import { LoadingState } from "@/components/ui";
 import { AdventureStatus } from "@/components/adventure-status";
+import { QuestOverview } from "@/components/quest-overview";
 import { WyldoCompanion } from "@/features/companion/wyldo-companion";
 import { useQuest } from "@/features/quest/provider";
 import { useAuth } from "@/features/auth/provider";
@@ -119,6 +120,11 @@ export default function QuestDetails() {
         </View>
       </View>
       <AdventureStatus />
+      <QuestOverview quest={quest} />
+      <AdventurePanel paper>
+        <Text style={gameStyles.paperTitle}>Über diese Quest</Text>
+        <Text style={gameStyles.paperBody}>{quest.story}</Text>
+      </AdventurePanel>
       <AdventurePanel
         style={{
           flexDirection: "row",
@@ -132,7 +138,6 @@ export default function QuestDetails() {
           ["8", "Kapitel"],
           ["4", "Steinsiegel"],
           [`${reward}`, "Übungs-XP · Vorschau"],
-          [quest.fieldReady ? quest.distance : "In Prüfung", "Wanderroute"],
         ].map(([value, label]) => (
           <View
             key={label}
@@ -148,10 +153,6 @@ export default function QuestDetails() {
             </Text>
           </View>
         ))}
-      </AdventurePanel>
-      <AdventurePanel paper>
-        <Text style={gameStyles.paperTitle}>Über diese Quest</Text>
-        <Text style={gameStyles.paperBody}>{quest.story}</Text>
       </AdventurePanel>
       <Text style={gameStyles.heading}>Dein Abenteuer</Text>
       <AdventureButton

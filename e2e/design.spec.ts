@@ -57,6 +57,21 @@ test("discovery search, filters and bookmarks remain usable on a small screen", 
   await expect(
     page.getByRole("button", { name: "Quest gemerkt", exact: true }),
   ).toBeVisible();
+  await expect(page.getByText("Dauer", { exact: true })).toBeVisible();
+  await expect(page.getByText("Schwierigkeit", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Rätsel: leicht bis mittel", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Noch zu vermessen", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Strecke: Route noch in Prüfung", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Noch keine Bewertungen", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("0 Bewertungen", { exact: true })).toBeVisible();
   await shot(page, "02-quest-details");
   await page.setViewportSize({ width: 320, height: 640 });
   await shot(page, "02-quest-details-small");
